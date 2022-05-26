@@ -1,4 +1,4 @@
-import { Address, AnchorProvider, Provider, web3 } from '@project-serum/anchor'
+import { Address, AnchorProvider, web3 } from '@project-serum/anchor'
 import { Connection, PublicKey, Transaction } from '@solana/web3.js'
 import { WalletInterface } from './rawWallet'
 
@@ -22,7 +22,7 @@ export const getAnchorProvider = (
   node: string,
   walletAddress: string,
   wallet: WalletInterface,
-): Provider => {
+): AnchorProvider => {
   const connection = new Connection(node, 'confirmed')
 
   const signAllTransactions = async (transactions: Transaction[]) => {

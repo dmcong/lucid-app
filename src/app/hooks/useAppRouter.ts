@@ -13,7 +13,6 @@ export const useAppRouter = () => {
   const history = useHistory()
   const params = useParams()
 
-  console.log('params', params)
   const query = useMemo(() => {
     return new URLSearchParams(search)
   }, [search])

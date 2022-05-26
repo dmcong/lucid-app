@@ -9,6 +9,7 @@ import {
 } from '@project-serum/anchor'
 import { TOKEN_PROGRAM_ID } from '@project-serum/anchor/dist/cjs/utils/token'
 import { ComputeBudgetProgram, Transaction } from '@solana/web3.js'
+import { PoolsState } from 'app/model/pools.controller'
 
 import { DEFAULT_IDL } from './constant'
 import { Lucid } from './lucid'
@@ -35,7 +36,14 @@ class LucidProgram {
     this.program = new Program<Lucid>(DEFAULT_IDL, programId, this._provider)
   }
 
-  getPools = () => {}
+  getPools = async (): Promise<PoolsState> => {
+    const accounts = await this.program.account.pool.all()
+    const pools: PoolsState = {}
+    for (const account of accounts) {
+      pools[account.publicKey.toBase58()] = account.account
+    }
+    return pools
+  }
 
   getPoolPDAs = async (pool: Address, mint: Address, baseMint: Address) => {
     const poolPublicKey = new web3.PublicKey(pool)
@@ -141,6 +149,8 @@ class LucidProgram {
     stableAmount: BN,
     baseAmount: BN,
   ) => {
+    console.log('mint', mint)
+    console.log('baseMint', baseMint)
     const pool = web3.Keypair.generate()
     const PDAs = await this.getPoolPDAs(pool.publicKey, mint, baseMint)
     const wallet = this._provider.wallet

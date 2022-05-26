@@ -13,6 +13,7 @@ import configs from 'app/configs'
 
 import 'app/static/styles/light.less'
 import 'app/static/styles/dark.less'
+import PoolWatcher from './watcher/pool.watcher'
 
 const {
   manifest: { appId },
@@ -25,7 +26,9 @@ export const Page = () => {
         <MintProvider>
           <AccountProvider>
             <Provider store={model}>
-              <View />
+              <PoolWatcher>
+                <View />
+              </PoolWatcher>
             </Provider>
           </AccountProvider>
         </MintProvider>

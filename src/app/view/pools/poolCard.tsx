@@ -6,13 +6,13 @@ import CardContent from './cardContent'
 import './style.less'
 import { useAppRouter } from 'app/hooks/useAppRouter'
 
-type PoolCardProps = { rank: number }
+type PoolCardProps = { rank: number; poolAddress: string }
 
-const PoolCard = ({ rank }: PoolCardProps) => {
+const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
   const { pushHistory } = useAppRouter()
 
   const onClick = () => {
-    pushHistory('/pool/123')
+    pushHistory(`/pool/${poolAddress}`)
   }
 
   return (

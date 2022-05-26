@@ -1,8 +1,11 @@
 import { Col, Row, Space, Typography } from 'antd'
 import PoolCard from './poolCard'
 import CreatePool from '../createPool'
+import { useSelector } from 'react-redux'
+import { AppState } from 'app/model'
 
 const Pools = () => {
+  const pools = useSelector((state: AppState) => state.pools)
   return (
     <Row gutter={[48, 48]} justify="center" align="middle">
       <Col span={24}>
@@ -27,9 +30,9 @@ const Pools = () => {
 
       <Col span={24}>
         <Row gutter={[24, 24]} justify="center" align="middle">
-          {[1, 2, 3, 4, 5].map((e, i) => (
-            <Col span={24}>
-              <PoolCard rank={i} />
+          {Object.keys(pools).map((poolAddress, i) => (
+            <Col span={24} key={poolAddress}>
+              <PoolCard rank={i} poolAddress={poolAddress} />
             </Col>
           ))}
         </Row>

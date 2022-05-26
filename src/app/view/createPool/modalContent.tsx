@@ -4,13 +4,43 @@ import React, { useState } from 'react'
 import { MintSelection } from 'shared/antd/mint'
 import NumericInput from 'shared/antd/numericInput'
 import IonIcon from '@sentre/antd-ionicon'
+import { useOracles } from 'app/hooks/useOracles'
+import { useLucid } from 'app/hooks/useLucid'
+import { notifyError, notifySuccess } from 'app/helper'
+
+import config from 'app/configs'
+import { BN } from 'bn.js'
 
 export const ModalContent = () => {
+  const [mint, setMint] = useState('')
   const [amount, setAmount] = useState('0')
   const [price, setPrice] = useState('0')
-  const [mint, setMint] = useState('')
+  const [loading, setLoading] = useState(false)
+  const { decimalizeMintAmount, decimalize } = useOracles()
+  const lucid = useLucid()
 
-  const onCreate = () => {}
+  const onCreate = async () => {
+    const FEE = new BN(10_000_000) // 1%
+    try {
+      setLoading(true)
+      const stableAmount = Number(amount) * Number(price)
+      const amountBN = await decimalizeMintAmount(amount, mint)
+      const stableAmountBN = decimalize(stableAmount, 9)
+      const { txId } = await lucid.initializePool(
+        mint,
+        config.sol.baseMint,
+        FEE,
+        amountBN,
+        stableAmountBN,
+        new BN(0),
+      )
+      notifySuccess('Create Pool', txId)
+    } catch (error) {
+      notifyError(error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <Row gutter={[24, 24]}>
@@ -67,7 +97,7 @@ export const ModalContent = () => {
         </Row>
       </Col>
       <Col span={24}>
-        <Button type="primary" block onClick={onCreate}>
+        <Button type="primary" block onClick={onCreate} disabled={loading}>
           Create
         </Button>
       </Col>

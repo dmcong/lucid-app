@@ -7,6 +7,7 @@ type Conf = {
   node: string
   spltAddress: string
   splataAddress: string
+  baseMint: string
 }
 
 const conf: Record<Net, Conf> = {
@@ -17,6 +18,7 @@ const conf: Record<Net, Conf> = {
     node: 'https://api.devnet.solana.com',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+    baseMint: '2z6Ci38Cx6PyL3tFrT95vbEeB3izqpoLdxxBkJk2euyj',
   },
 
   /**
@@ -26,6 +28,7 @@ const conf: Record<Net, Conf> = {
     node: 'https://api.testnet.solana.com',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+    baseMint: '',
   },
 
   /**
@@ -35,6 +38,7 @@ const conf: Record<Net, Conf> = {
     node: 'https://api.mainnet-beta.solana.com',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+    baseMint: '',
   },
 }
 

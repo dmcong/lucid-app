@@ -1,6 +1,6 @@
 import { Button, Modal } from 'antd'
 import React, { Fragment, useState } from 'react'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import { ModalContent } from './modalContent'
 
 const CreatePool = () => {

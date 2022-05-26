@@ -8,6 +8,7 @@ import {
   BN,
 } from '@project-serum/anchor'
 import { TOKEN_PROGRAM_ID } from '@project-serum/anchor/dist/cjs/utils/token'
+import { ComputeBudgetProgram, Transaction } from '@solana/web3.js'
 
 import { DEFAULT_IDL } from './constant'
 import { Lucid } from './lucid'
@@ -116,7 +117,12 @@ class LucidProgram {
       ],
       this.program.programId,
     )
+    const [cert] = await web3.PublicKey.findProgramAddress(
+      [poolPDAs.lptMint.toBuffer(), walletPublicKey.toBuffer()],
+      this.program.programId,
+    )
     return {
+      cert,
       cheque,
       lptTokenAccount,
       tokenAccount,
@@ -131,6 +137,7 @@ class LucidProgram {
     fee: BN,
     amount: BN,
     stableAmount: BN,
+    baseAmount: BN,
   ) => {
     const pool = web3.Keypair.generate()
     const PDAs = await this.getPoolPDAs(pool.publicKey, mint, baseMint)
@@ -142,17 +149,26 @@ class LucidProgram {
       baseMint,
     )
 
-    const txId = await this.program.methods
-      .initializePool(fee, amount, stableAmount)
+    const additionalComputeBudgetInstruction =
+      ComputeBudgetProgram.requestUnits({
+        units: 400000,
+        additionalFee: 0,
+      })
+    const transaction = new Transaction().add(
+      additionalComputeBudgetInstruction,
+    )
+
+    const instruction = await this.program.methods
+      .initializePool(fee, amount, stableAmount, baseAmount)
       .accounts({
         authority: wallet.publicKey,
         ...PDAs,
         ...tokenAccounts,
         ...DEFAULT_PROGRAMS,
       })
-      .signers([pool])
-      .rpc()
-
+      .instruction()
+    transaction.add(instruction)
+    const txId = await this._provider.sendAndConfirm(transaction, [pool])
     return { txId, address: pool.publicKey }
   }
 
@@ -200,7 +216,12 @@ class LucidProgram {
     return { txId }
   }
 
-  addLiquidity = async (pool: Address, amount: BN, stableAmount: BN) => {
+  addLiquidity = async (
+    pool: Address,
+    amount: BN,
+    stableAmount: BN,
+    baseAmount: BN,
+  ) => {
     const { mint, baseMint } = await this.program.account.pool.fetch(pool)
     const PDAs = await this.getPoolPDAs(pool, mint, baseMint)
     const wallet = this._provider.wallet
@@ -211,7 +232,7 @@ class LucidProgram {
       baseMint,
     )
     const txId = await this.program.methods
-      .addLiquidity(amount, stableAmount)
+      .addLiquidity(amount, stableAmount, baseAmount)
       .accounts({
         authority: wallet.publicKey,
         ...PDAs,
@@ -256,6 +277,72 @@ class LucidProgram {
     )
     const txId = await this.program.methods
       .borrow(lpt_amount)
+      .accounts({
+        authority: wallet.publicKey,
+        ...PDAs,
+        ...tokenAccounts,
+        ...DEFAULT_PROGRAMS,
+      })
+      .rpc()
+    return { txId }
+  }
+
+  repay = async (pool: Address, base_amount: BN) => {
+    const { mint, baseMint } = await this.program.account.pool.fetch(pool)
+    const PDAs = await this.getPoolPDAs(pool, mint, baseMint)
+    const wallet = this._provider.wallet
+    const tokenAccounts = await this.getTokenAccounts(
+      wallet.publicKey,
+      pool,
+      mint,
+      baseMint,
+    )
+    const txId = await this.program.methods
+      .repay(base_amount)
+      .accounts({
+        authority: wallet.publicKey,
+        ...PDAs,
+        ...tokenAccounts,
+        ...DEFAULT_PROGRAMS,
+      })
+      .rpc()
+    return { txId }
+  }
+
+  buy = async (pool: Address, stable_amount: BN, base_amount: BN) => {
+    const { mint, baseMint } = await this.program.account.pool.fetch(pool)
+    const PDAs = await this.getPoolPDAs(pool, mint, baseMint)
+    const wallet = this._provider.wallet
+    const tokenAccounts = await this.getTokenAccounts(
+      wallet.publicKey,
+      pool,
+      mint,
+      baseMint,
+    )
+    const txId = await this.program.methods
+      .buy(stable_amount, base_amount)
+      .accounts({
+        authority: wallet.publicKey,
+        ...PDAs,
+        ...tokenAccounts,
+        ...DEFAULT_PROGRAMS,
+      })
+      .rpc()
+    return { txId }
+  }
+
+  sell = async (pool: Address, amount: BN) => {
+    const { mint, baseMint } = await this.program.account.pool.fetch(pool)
+    const PDAs = await this.getPoolPDAs(pool, mint, baseMint)
+    const wallet = this._provider.wallet
+    const tokenAccounts = await this.getTokenAccounts(
+      wallet.publicKey,
+      pool,
+      mint,
+      baseMint,
+    )
+    const txId = await this.program.methods
+      .sell(amount)
       .accounts({
         authority: wallet.publicKey,
         ...PDAs,

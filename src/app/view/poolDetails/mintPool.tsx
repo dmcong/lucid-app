@@ -1,7 +1,7 @@
 import { Button, Card, Col, Row } from 'antd'
 import MintInput from 'app/components/mintInput'
 import { useState } from 'react'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 const MintPool = () => {
   const [amount, setAmount] = useState('0')

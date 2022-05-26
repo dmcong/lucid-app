@@ -1,9 +1,9 @@
-import LazyLoad from '@senswap/react-lazyload'
+import LazyLoad from '@sentre/react-lazyload'
 
 import { Row, Col, Typography, Modal } from 'antd'
 import Search from './search'
 import Mint from './mint'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import { useState } from 'react'
 
 const LIMITATION = 100

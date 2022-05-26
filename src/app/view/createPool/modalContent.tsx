@@ -3,7 +3,7 @@ import MintInput from 'app/components/mintInput'
 import React, { useState } from 'react'
 import { MintSelection } from 'shared/antd/mint'
 import NumericInput from 'shared/antd/numericInput'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 export const ModalContent = () => {
   const [amount, setAmount] = useState('0')

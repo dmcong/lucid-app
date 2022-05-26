@@ -3,6 +3,7 @@ import PoolCard from './poolCard'
 import CreatePool from '../createPool'
 import { useSelector } from 'react-redux'
 import { AppState } from 'app/model'
+import JoinPool from 'app/components/joinPool'
 
 const Pools = () => {
   const pools = useSelector((state: AppState) => state.pools)
@@ -26,6 +27,11 @@ const Pools = () => {
             </Space>
           </Col>
         </Row>
+      </Col>
+
+      {/* Join Pool */}
+      <Col span={24}>
+        <JoinPool />
       </Col>
 
       <Col span={24}>

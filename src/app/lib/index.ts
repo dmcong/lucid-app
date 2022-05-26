@@ -35,6 +35,8 @@ class LucidProgram {
     this.program = new Program<Lucid>(DEFAULT_IDL, programId, this._provider)
   }
 
+  getPools = () => {}
+
   getPoolPDAs = async (pool: Address, mint: Address, baseMint: Address) => {
     const poolPublicKey = new web3.PublicKey(pool)
     const mintPublicKey = new web3.PublicKey(mint)

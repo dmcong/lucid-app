@@ -4,12 +4,23 @@ import { MintAvatar, MintName, MintSymbol } from 'shared/antd/mint'
 import { numeric } from 'shared/util'
 import CardContent from './cardContent'
 import './style.less'
+import { useAppRouter } from 'app/hooks/useAppRouter'
 
 type PoolCardProps = { rank: number }
 
 const PoolCard = ({ rank }: PoolCardProps) => {
+  const { pushHistory } = useAppRouter()
+
+  const onClick = () => {
+    pushHistory('/pool/123')
+  }
+
   return (
-    <Card bordered={false} className={`pool-card top-${rank}`}>
+    <Card
+      bordered={false}
+      className={`pool-card top-${rank}`}
+      onClick={onClick}
+    >
       <Row gutter={[24, 24]} align="middle">
         <Col>
           <Typography.Title level={5}>{rank}</Typography.Title>

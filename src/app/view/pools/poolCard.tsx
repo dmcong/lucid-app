@@ -5,10 +5,13 @@ import { numeric } from 'shared/util'
 import CardContent from './cardContent'
 import './style.less'
 import { useAppRouter } from 'app/hooks/useAppRouter'
+import { useSelector } from 'react-redux'
+import { AppState } from 'app/model'
 
 type PoolCardProps = { rank: number; poolAddress: string }
 
 const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
+  const poolData = useSelector((state: AppState) => state.pools[poolAddress])
   const { pushHistory } = useAppRouter()
 
   const onClick = () => {
@@ -26,18 +29,15 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
           <Typography.Title level={5}>{rank}</Typography.Title>
         </Col>
         <Col>
-          <MintAvatar
-            mintAddress="5YwUkPdXLoujGkZuo9B4LsLKj3hdkDcfP4derpspifSJ"
-            size={48}
-          />
+          <MintAvatar mintAddress={poolData.mint.toBase58()} size={48} />
         </Col>
         <Col span={4}>
           <Space direction="vertical">
             <Typography.Title level={5}>
-              <MintName mintAddress="5YwUkPdXLoujGkZuo9B4LsLKj3hdkDcfP4derpspifSJ" />
+              <MintName mintAddress={poolData.mint.toBase58()} />
             </Typography.Title>
             <Typography.Title level={5} className="symbol">
-              <MintSymbol mintAddress="5YwUkPdXLoujGkZuo9B4LsLKj3hdkDcfP4derpspifSJ" />
+              <MintSymbol mintAddress={poolData.mint.toBase58()} />
             </Typography.Title>
           </Space>
         </Col>
@@ -52,21 +52,21 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
           <CardContent
             label="Total Value Locked"
             value={numeric(Math.random() * 100000).format('0,0.00[00]')}
-            mintAddress="2z6Ci38Cx6PyL3tFrT95vbEeB3izqpoLdxxBkJk2euyj"
+            mintAddress={poolData.stableMint.toBase58()}
           />
         </Col>
         <Col span={4}>
           <CardContent
             label="Your Liquidity"
             value={numeric(Math.random() * 100000).format('0,0.00[00]')}
-            mintAddress="2z6Ci38Cx6PyL3tFrT95vbEeB3izqpoLdxxBkJk2euyj"
+            mintAddress={poolData.stableMint.toBase58()}
           />
         </Col>
         <Col span={4}>
           <CardContent
             label="Your Liquidity"
             value={numeric(Math.random() * 100000).format('0,0.00[00]')}
-            mintAddress="2z6Ci38Cx6PyL3tFrT95vbEeB3izqpoLdxxBkJk2euyj"
+            mintAddress={poolData.stableMint.toBase58()}
           />
         </Col>
         <Col>

@@ -33,6 +33,17 @@ const supplementary = [
   sol(103),
   sntr(103),
   {
+    symbol: 'TUAN',
+    name: 'Thanh Tuan',
+    address: 'HJu2n1oZrjjxiCix442Ke5SCYbbih7btjBMqwXcoibbR',
+    decimals: 9,
+    chainId: 103,
+    extensions: {
+      coingeckoId: 'kitty-solana',
+    },
+    logoURI: 'https://cdn.jsdelivr.net/gh/xRoBBeRT/DickButtLogo/DickButt.png',
+  },
+  {
     symbol: 'wBTC',
     name: 'Wrapped Bitcoin',
     address: '8jk4eJymMfNZV9mkRNxJEt2VJ3pRvdJvD5FE94GXGBPM',

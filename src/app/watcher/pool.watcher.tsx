@@ -15,6 +15,7 @@ import { useLucid } from 'app/hooks/useLucid'
 let watchId = 0
 
 const PoolWatcher: FunctionComponent = (props) => {
+  const [loading, setLoading] = useState(true)
   const dispatch = useDispatch<AppDispatch>()
   const lucid = useLucid()
 
@@ -29,6 +30,8 @@ const PoolWatcher: FunctionComponent = (props) => {
         type: 'error',
         description: 'Cannot fetch data of pools',
       })
+    } finally {
+      setLoading(false)
     }
   }, [dispatch, lucid])
 
@@ -55,6 +58,7 @@ const PoolWatcher: FunctionComponent = (props) => {
     //}
   }, [fetchData, watchData])
 
+  if (loading) return <div>Loading</div>
   return <Fragment>{props.children}</Fragment>
 }
 

@@ -19,6 +19,7 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
     pushHistory(`/pool/${poolAddress}`)
   }
 
+  console.log('poolData.stableMint.toBase58()', poolData.stableMint.toBase58())
   return (
     <Card
       bordered={false}
@@ -51,23 +52,23 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
         </Col>
         <Col span={4}>
           <CardContent
+            label="Total Fee"
+            value={numeric(Math.random() * 100000).format('0,0.00[00]')}
+            mintAddress={poolData.baseMint.toBase58()}
+          />
+        </Col>
+        <Col span={4}>
+          <CardContent
             label="Total Value Locked"
             value={numeric(Math.random() * 100000).format('0,0.00[00]')}
-            mintAddress={poolData.stableMint.toBase58()}
+            mintAddress={poolData.baseMint.toBase58()}
           />
         </Col>
         <Col span={4}>
           <CardContent
             label="Your Liquidity"
             value={numeric(Math.random() * 100000).format('0,0.00[00]')}
-            mintAddress={poolData.stableMint.toBase58()}
-          />
-        </Col>
-        <Col span={4}>
-          <CardContent
-            label="Your Liquidity"
-            value={numeric(Math.random() * 100000).format('0,0.00[00]')}
-            mintAddress={poolData.stableMint.toBase58()}
+            mintAddress={poolData.baseMint.toBase58()}
           />
         </Col>
         <Col>

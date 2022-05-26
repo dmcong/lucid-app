@@ -1,8 +1,20 @@
 import { Card, Col, Row, Space, Typography } from 'antd'
 import RowSpaceVertical from 'app/components/rowSpaceVertical'
-import { MintAvatar, MintSymbol } from 'shared/antd/mint'
+import useAPR from 'app/hooks/useAPR'
+import useTVL from 'app/hooks/useTVL'
+import { AppState } from 'app/model'
+import { useSelector } from 'react-redux'
+import { MintAvatar, MintName, MintSymbol } from 'shared/antd/mint'
+import { numeric } from 'shared/util'
+import { PoolDetailsProps } from './index'
 
-const PoolInfo = () => {
+const PoolInfo = ({ poolAddress }: PoolDetailsProps) => {
+  const pools = useSelector((state: AppState) => state.pools)
+  const poolData = pools[poolAddress]
+  const { mint } = poolData
+  const mintAddress = mint.toBase58()
+  const tvl = useTVL(poolAddress)
+  const apr = useAPR(poolAddress)
   return (
     <Card>
       <Row gutter={[8, 8]}>
@@ -11,8 +23,11 @@ const PoolInfo = () => {
             label={<Typography.Title level={5}>Protocol name</Typography.Title>}
             value={
               <Space>
-                <MintAvatar mintAddress="11111111111111111111111111111111" />
-                <Typography.Title level={3}>Solana (SOL)</Typography.Title>
+                <MintAvatar mintAddress={mintAddress} />
+                <Typography.Title level={3}>
+                  <MintName mintAddress={mintAddress} />{' '}
+                  <MintSymbol mintAddress={mintAddress} />
+                </Typography.Title>
               </Space>
             }
           />
@@ -26,7 +41,11 @@ const PoolInfo = () => {
                     Total Value Locked
                   </Typography.Text>
                 }
-                value={<Typography.Title level={3}>$100.000</Typography.Title>}
+                value={
+                  <Typography.Title level={3}>
+                    $ {numeric(tvl.toNumber()).format('0,0')}
+                  </Typography.Title>
+                }
               />
             </Col>
             <Col span={6}>
@@ -40,7 +59,11 @@ const PoolInfo = () => {
             <Col span={6}>
               <RowSpaceVertical
                 label={<Typography.Text type="secondary">APR</Typography.Text>}
-                value={<Typography.Text type="secondary">105%</Typography.Text>}
+                value={
+                  <Typography.Text type="secondary">
+                    {numeric(apr.toNumber()).format('0,0')}%
+                  </Typography.Text>
+                }
               />
             </Col>
             <Col span={6}>

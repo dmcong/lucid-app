@@ -14,6 +14,7 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
   const poolData = useSelector((state: AppState) => state.pools[poolAddress])
   const { pushHistory } = useAppRouter()
 
+  console.log('poolData', poolData)
   const onClick = () => {
     pushHistory(`/pool/${poolAddress}`)
   }

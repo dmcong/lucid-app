@@ -80,6 +80,9 @@
 // Checkbox
 @checkbox-border-radius: @border-radius-base - 4;
 
+//Table
+@table-bg: @TRANSPARENT;
+
 // Patch
 .@{ant-prefix}-layout {
   background: unset;
@@ -91,6 +94,6 @@
     backdrop-filter: blur(4px);
   }
 }
-
-//Table
-@table-bg: @TRANSPARENT;
+.@{ant-prefix}-card-gradient {
+  background: linear-gradient(180deg, #f5f1ff 0%, #ceffe8 100%);
+}

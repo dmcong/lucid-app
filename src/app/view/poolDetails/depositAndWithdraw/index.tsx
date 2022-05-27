@@ -2,8 +2,12 @@ import { Fragment, useState } from 'react'
 
 import { Button, Modal, Tabs } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
+import Deposit from './deposit'
 
-const DepositAndWithdraw = () => {
+import { PoolDetailsProps } from '../index'
+import Withdraw from './withdraw'
+
+const DepositAndWithdraw = ({ poolAddress }: PoolDetailsProps) => {
   const [visible, setVisible] = useState(false)
   return (
     <Fragment>
@@ -18,10 +22,10 @@ const DepositAndWithdraw = () => {
       >
         <Tabs>
           <Tabs.TabPane key="deposit" tab="Deposit">
-            Deposit
+            <Deposit poolAddress={poolAddress} />
           </Tabs.TabPane>
           <Tabs.TabPane key="withdraw" tab="Withdraw">
-            Withdraw
+            <Withdraw poolAddress={poolAddress} />
           </Tabs.TabPane>
         </Tabs>
       </Modal>

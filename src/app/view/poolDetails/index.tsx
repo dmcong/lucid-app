@@ -14,15 +14,15 @@ export type PoolDetailsProps = {
 
 const PoolDetails = () => {
   const params = useParams<{ poolId: string }>()
-  const poolADdress = params.poolId
+  const poolAddress = params.poolId
 
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Header />
+        <Header poolAddress={poolAddress} />
       </Col>
       <Col span={24}>
-        <PoolInfo poolAddress={poolADdress} />
+        <PoolInfo poolAddress={poolAddress} />
       </Col>
       <Col span={24}>
         <Balances />

@@ -1,8 +1,9 @@
 import { Button, Col, Row } from 'antd'
 import { useAppRouter } from 'app/hooks/useAppRouter'
+import { PoolDetailsProps } from './index'
 import DepositAndWithdraw from './depositAndWithdraw'
 
-const Header = () => {
+const Header = ({ poolAddress }: PoolDetailsProps) => {
   const { pushHistory } = useAppRouter()
   return (
     <Row>
@@ -10,7 +11,7 @@ const Header = () => {
         <Button onClick={() => pushHistory('/')}>Back</Button>
       </Col>
       <Col>
-        <DepositAndWithdraw />
+        <DepositAndWithdraw poolAddress={poolAddress} />
       </Col>
     </Row>
   )

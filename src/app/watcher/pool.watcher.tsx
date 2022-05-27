@@ -37,26 +37,26 @@ const PoolWatcher: FunctionComponent = (props) => {
 
   // Watch account changes
   const watchData = useCallback(async () => {
-    // if (watchId) return console.warn('Already watched')
-    // watchId = window.balansol.watch((er: string | null, re) => {
-    //   if (er) return console.error(er)
-    //   if (re) return dispatch(upsetPool({ address: re.address, data: re.data }))
-    // }, [])
-  }, [dispatch])
+    if (watchId) return console.warn('Already watched')
+    watchId = lucid.watch((er: string | null, re) => {
+      if (er) return console.error(er)
+      if (re) return dispatch(upsetPool({ address: re.address, data: re.data }))
+    }, [])
+  }, [dispatch, lucid])
 
   useEffect(() => {
     fetchData()
     watchData()
     // Unwatch (cancel socket)
-    // return () => {
-    //   ;(async () => {
-    //     try {
-    //       await window.balansol.unwatch(watchId)
-    //     } catch (er) {}
-    //   })()
-    //   watchId = 0
-    //}
-  }, [fetchData, watchData])
+    return () => {
+      ;(async () => {
+        try {
+          await lucid.unwatch(watchId)
+        } catch (er) {}
+      })()
+      watchId = 0
+    }
+  }, [fetchData, lucid, watchData])
 
   if (loading) return <div>Loading</div>
   return <Fragment>{props.children}</Fragment>

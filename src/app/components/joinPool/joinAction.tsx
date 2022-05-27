@@ -1,8 +1,23 @@
 import { Fragment, ReactNode, useCallback, useState } from 'react'
+import { net } from 'shared/runtime'
+import { numeric } from 'shared/util'
+import { BN } from 'bn.js'
 
 import { Button, Col, Modal, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
-import { MintSymbol } from 'shared/antd/mint'
+import { MintAvatar, MintSymbol } from 'shared/antd/mint'
+import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
+import { notifyError, notifySuccess } from 'app/helper'
+import { useOracles } from 'app/hooks/useOracles'
+import { useLucid } from 'app/hooks/useLucid'
+
+const MINT_USDC = {
+  devnet: '2z6Ci38Cx6PyL3tFrT95vbEeB3izqpoLdxxBkJk2euyj',
+  testnet: '',
+  mainnet: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+}
+const HARDCODE_POOL_ADDRESS = 'FHvzpH2y1G3hNppMsVcj8Mi8Nc5kAkvQi5G2Uj4hZjz5'
+const DEFAULT_AMOUNT = new BN(0)
 
 type RowContentProps = { label?: string; value?: ReactNode }
 const RowContent = ({ label = '', value }: RowContentProps) => {
@@ -14,11 +29,37 @@ const RowContent = ({ label = '', value }: RowContentProps) => {
   )
 }
 
-const JoinAction = () => {
+type JoinActionProps = { poolAddress?: string }
+const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
   const [visible, setVisible] = useState(false)
-  const [value, setValue] = useState('0')
+  const [amount, setAmount] = useState('0')
+  const [loading, setLoading] = useState(false)
+  const mintUSDC = MINT_USDC[net]
+  const { balance } = useAccountBalanceByMintAddress(mintUSDC)
+  const { decimalizeMintAmount } = useOracles()
+  const lucid = useLucid()
+  const disabled = !Number(amount) || Number(amount) > Number(balance)
 
-  const onJoin = useCallback(async () => {}, [])
+  const onJoin = useCallback(async () => {
+    if (disabled) return
+    try {
+      setLoading(true)
+      const baseAmount = await decimalizeMintAmount(amount, mintUSDC)
+
+      const { txId } = await lucid.addLiquidity(
+        HARDCODE_POOL_ADDRESS,
+        DEFAULT_AMOUNT,
+        DEFAULT_AMOUNT,
+        baseAmount,
+      )
+      setVisible(false)
+      return notifySuccess('Join Hakapool Successfully', txId)
+    } catch (err) {
+      notifyError(err)
+    } finally {
+      setLoading(false)
+    }
+  }, [decimalizeMintAmount, amount, disabled, lucid, mintUSDC])
 
   return (
     <Fragment>
@@ -34,14 +75,18 @@ const JoinAction = () => {
         visible={visible}
         onCancel={() => setVisible(false)}
         footer={false}
-        // closeIcon={<IonIcon name="close-outline" />}
         closable={false}
       >
         <Row gutter={[24, 24]} justify="end">
           <Col>
             <Space size={6}>
               <Typography.Text type="secondary">Available:</Typography.Text>
-              <Typography.Text>{0}</Typography.Text>
+              <Typography.Text
+                style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                onClick={() => setAmount(balance.toString())}
+              >
+                {numeric(balance).format('0,0.[0000]')}
+              </Typography.Text>
             </Space>
           </Col>
           <Col span={24}>
@@ -49,14 +94,18 @@ const JoinAction = () => {
               <Col flex="auto">
                 <NumericInput
                   bordered={false}
-                  value={value}
-                  onValue={setValue}
+                  value={amount}
+                  onValue={setAmount}
                   className="join-input"
-                  suffix={<MintSymbol mintAddress="" />}
+                  suffix={<MintSymbol mintAddress={mintUSDC} />}
                 />
               </Col>
               <Col>
-                <Button ghost onClick={() => {}} style={{ borderRadius: 999 }}>
+                <Button
+                  ghost
+                  onClick={() => setAmount(balance.toString())}
+                  style={{ borderRadius: 999 }}
+                >
                   Max
                 </Button>
               </Col>
@@ -72,49 +121,43 @@ const JoinAction = () => {
                   label="My supply"
                   value={
                     <Space>
-                      <Typography.Text>18.5</Typography.Text>
-                      <MintSymbol mintAddress="" />
+                      <Typography.Text>
+                        {numeric(amount).format('0,0.[0000]')}
+                      </Typography.Text>
+                      <MintSymbol mintAddress={mintUSDC} />
                     </Space>
                   }
                 />
               </Col>
               <Col span={24}>
                 <RowContent
-                  label="My supply"
-                  value={
-                    <Space>
-                      <Typography.Text>18.5</Typography.Text>
-                      <MintSymbol mintAddress="" />
-                    </Space>
-                  }
+                  label="Supply APR"
+                  value={<Typography.Text>0.45%</Typography.Text>}
                 />
               </Col>
               <Col span={24}>
                 <RowContent
-                  label="My supply"
-                  value={
-                    <Space>
-                      <Typography.Text>18.5</Typography.Text>
-                      <MintSymbol mintAddress="" />
-                    </Space>
-                  }
+                  label="You will receive"
+                  value={<Typography.Text>14.2LP</Typography.Text>}
                 />
               </Col>
               <Col span={24}>
                 <RowContent
-                  label="My supply"
-                  value={
-                    <Space>
-                      <Typography.Text>18.5</Typography.Text>
-                      <MintSymbol mintAddress="" />
-                    </Space>
-                  }
+                  label="Token will reward"
+                  value={<MintAvatar mintAddress={mintUSDC} />}
                 />
               </Col>
             </Row>
           </Col>
           <Col span={24}>
-            <Button type="primary" onClick={onJoin} block>
+            <Button
+              type="primary"
+              style={{ borderRadius: 999 }}
+              onClick={onJoin}
+              disabled={disabled}
+              loading={loading}
+              block
+            >
               Deposit
             </Button>
           </Col>

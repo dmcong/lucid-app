@@ -33,8 +33,8 @@ const supplementary = [
   sol(103),
   sntr(103),
   {
-    symbol: 'TUAN',
-    name: 'Thanh Tuan',
+    symbol: 'LUCID',
+    name: 'Lucid Protocol',
     address: 'HJu2n1oZrjjxiCix442Ke5SCYbbih7btjBMqwXcoibbR',
     decimals: 9,
     chainId: 103,

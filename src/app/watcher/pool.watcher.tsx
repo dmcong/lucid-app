@@ -22,7 +22,6 @@ const PoolWatcher: FunctionComponent = (props) => {
   // First-time fetching
   const fetchData = useCallback(async () => {
     try {
-      console.log('Call Pools')
       const pools = await lucid.getPools()
       await dispatch(upsetPools(pools)).unwrap()
     } catch (er) {

@@ -196,7 +196,7 @@ export type Lucid = {
       ]
       args: [
         {
-          name: 'amount'
+          name: 'baseAmount'
           type: 'u64'
         },
       ]
@@ -277,7 +277,7 @@ export type Lucid = {
       ]
       args: [
         {
-          name: 'amount'
+          name: 'stableAmount'
           type: 'u64'
         },
       ]
@@ -960,6 +960,14 @@ export type Lucid = {
             name: 'totalLptFee'
             type: 'u64'
           },
+          {
+            name: 'lptSupply'
+            type: 'u64'
+          },
+          {
+            name: 'startTime'
+            type: 'i64'
+          },
         ]
       }
     },
@@ -1186,7 +1194,7 @@ export const IDL: Lucid = {
       ],
       args: [
         {
-          name: 'amount',
+          name: 'baseAmount',
           type: 'u64',
         },
       ],
@@ -1267,7 +1275,7 @@ export const IDL: Lucid = {
       ],
       args: [
         {
-          name: 'amount',
+          name: 'stableAmount',
           type: 'u64',
         },
       ],
@@ -1949,6 +1957,14 @@ export const IDL: Lucid = {
           {
             name: 'totalLptFee',
             type: 'u64',
+          },
+          {
+            name: 'lptSupply',
+            type: 'u64',
+          },
+          {
+            name: 'startTime',
+            type: 'i64',
           },
         ],
       },

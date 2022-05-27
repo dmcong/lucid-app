@@ -61,7 +61,7 @@ const PoolInfo = ({ poolAddress }: PoolDetailsProps) => {
                 label={<Typography.Text type="secondary">APR</Typography.Text>}
                 value={
                   <Typography.Text type="secondary">
-                    {numeric(apr.toNumber()).format('0,0')}%
+                    {numeric(apr).format('0,0')}%
                   </Typography.Text>
                 }
               />

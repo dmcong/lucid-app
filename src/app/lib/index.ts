@@ -24,6 +24,12 @@ const DEFAULT_PROGRAMS = {
   tokenProgram: TOKEN_PROGRAM_ID,
 }
 
+export type BalancerAccountChangeInfo = {
+  type: 'pool'
+  address: string
+  data: Buffer
+}
+
 class LucidProgram {
   private _provider: AnchorProvider
   readonly program: Program<Lucid>
@@ -363,6 +369,57 @@ class LucidProgram {
       })
       .rpc()
     return { txId }
+  }
+
+  /**
+   * Watch account changes
+   * @param callback
+   * @param filters
+   * @returns Watch id
+   */
+  watch = (
+    callback: (
+      error: string | null,
+      data:
+        | (Omit<BalancerAccountChangeInfo, 'data'> & {
+            data: PoolData
+          })
+        | null,
+    ) => void,
+    filters?: web3.GetProgramAccountsFilter[],
+  ): number => {
+    const cb = ({
+      accountId,
+      accountInfo: { data: buf },
+    }: web3.KeyedAccountInfo) => {
+      const address = accountId.toBase58()
+      try {
+        const data = this.program.coder.accounts.decode<PoolData>('Pool', buf)
+        return callback(null, {
+          type: 'pool',
+          address,
+          data,
+        })
+      } catch (error) {}
+    }
+    return this.program.provider.connection.onProgramAccountChange(
+      this.program.programId,
+      cb,
+      'confirmed',
+      filters,
+    )
+  }
+
+  /**
+   * Unwatch a watcher by watch id
+   * @param watchId
+   * @returns
+   */
+  unwatch = async (watchId: number): Promise<void> => {
+    if (!watchId) return
+    return await this.program.provider.connection.removeProgramAccountChangeListener(
+      watchId,
+    )
   }
 }
 

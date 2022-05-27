@@ -1,4 +1,4 @@
-import { Button, Card, Col, Divider, Row, Space, Typography } from 'antd'
+import { Card, Col, Divider, Row, Space, Typography } from 'antd'
 
 import './index.less'
 import JoinAction from './joinAction'

@@ -1,7 +1,7 @@
 import { Card, Col, Row, Space, Typography } from 'antd'
 import RowSpaceVertical from 'app/components/rowSpaceVertical'
-import useAPR from 'app/hooks/useAPR'
-import useTVL from 'app/hooks/useTVL'
+import useAPR from 'app/hooks/pool/useAPR'
+import useTVL from 'app/hooks/pool/useTVL'
 import { AppState } from 'app/model'
 import { useSelector } from 'react-redux'
 import { MintAvatar, MintName, MintSymbol } from 'shared/antd/mint'
@@ -43,7 +43,7 @@ const PoolInfo = ({ poolAddress }: PoolDetailsProps) => {
                 }
                 value={
                   <Typography.Title level={3}>
-                    $ {numeric(tvl.toNumber()).format('0,0')}
+                    $ {numeric(tvl).format('0,0.[00]')}
                   </Typography.Title>
                 }
               />

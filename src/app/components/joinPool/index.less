@@ -1,16 +1,5 @@
 .bg-gradient {
   position: relative;
-  background: radial-gradient(
-    circle,
-    rgba(61, 11, 133, 1) 1%,
-    rgba(132, 21, 157, 1) 13%,
-    rgba(65, 22, 146, 1) 24%,
-    rgba(61, 0, 138, 1) 36%,
-    rgba(13, 42, 192, 1) 50%,
-    rgba(25, 20, 251, 1) 56%,
-    rgba(10, 117, 170, 1) 79%,
-    rgba(10, 117, 170, 1) 96%
-  ) !important;
   &::before {
     position: absolute;
     content: '';
@@ -18,7 +7,18 @@
     height: 100%;
     top: 0;
     left: 50%;
-    border-left: 1px dashed #fff;
+    border-left: 1px dashed #151515;
     transform: translateX(-50%);
+  }
+}
+.join-input {
+  .lucid-input-suffix,
+  .lucid-input {
+    font-size: 40px !important;
+    font-weight: 700;
+    text-align: right;
+  }
+  .lucid-input-suffix {
+    color: #cbffcc;
   }
 }

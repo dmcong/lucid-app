@@ -394,7 +394,9 @@ class LucidProgram {
     }: web3.KeyedAccountInfo) => {
       const address = accountId.toBase58()
       try {
-        const data = this.program.coder.accounts.decode<PoolData>('Pool', buf)
+        console.log('zo')
+        const data = this.program.coder.accounts.decode('pool', buf)
+        console.log('pool data', data)
         return callback(null, {
           type: 'pool',
           address,

@@ -36,8 +36,8 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
       const { txId } = await lucid.addLiquidity(
         poolAddress,
         amountBN,
-        amountBaseBN,
         amountStableBN,
+        amountBaseBN,
       )
       return notifySuccess('Deposited', txId)
     } catch (error) {

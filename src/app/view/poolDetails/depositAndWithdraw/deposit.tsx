@@ -23,6 +23,8 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
   const mintAddress = mint.toBase58()
   const lucid = useLucid()
 
+  console.log(mintAddress, 'mint Adrress')
+
   const { decimalizeMintAmount } = useOracles()
   const onDeposit = async () => {
     try {

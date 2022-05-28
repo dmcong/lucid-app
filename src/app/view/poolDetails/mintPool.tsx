@@ -1,12 +1,55 @@
+import { useState } from 'react'
+
 import { Button, Card, Col, Row } from 'antd'
 import MintInput from 'app/components/mintInput'
-import { useState } from 'react'
 import IonIcon from '@sentre/antd-ionicon'
 
-const MintPool = () => {
-  const [amount, setAmount] = useState('0')
+import { useLucid } from 'app/hooks/useLucid'
+import { notifyError, notifySuccess } from 'app/helper'
+import { useOracles } from 'app/hooks/useOracles'
+import { Address } from '@project-serum/anchor'
 
-  const onSwap = () => {}
+type MintPoolProps = {
+  poolAddress: string
+}
+
+const MintPool = ({ poolAddress }: MintPoolProps) => {
+  const [amount, setAmount] = useState('0')
+  const [loading, setLoading] = useState(false)
+  const lucid = useLucid()
+  const { decimalizeMintAmount } = useOracles()
+  const [baseMint, setBaseMint] = useState('')
+  const [tokenMint, setTokenMint] = useState(
+    'HJu2n1oZrjjxiCix442Ke5SCYbbih7btjBMqwXcoibbR',
+  )
+
+  const onBuy = async () => {
+    setLoading(true)
+    try {
+      const amountBN = await decimalizeMintAmount(amount, baseMint)
+      // console.log(amountBN.toNumber(), 'amountBN')
+      const { txId } = await lucid.buy(poolAddress, amountBN, amountBN)
+      return notifySuccess('Deposited', txId)
+    } catch (error) {
+      notifyError(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const onSell = async () => {
+    setLoading(true)
+    try {
+      const amountBN = await decimalizeMintAmount(amount, tokenMint)
+      // console.log(amountBN.toNumber(), 'amountBN')
+      const { txId } = await lucid.sell(poolAddress, amountBN)
+      return notifySuccess('Deposited', txId)
+    } catch (error) {
+      notifyError(error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <Card>
@@ -14,7 +57,7 @@ const MintPool = () => {
         <Col span={24}>
           <MintInput
             amount={amount}
-            selectedMint={'5YwUkPdXLoujGkZuo9B4LsLKj3hdkDcfP4derpspifSJ'}
+            selectedMint={'HJu2n1oZrjjxiCix442Ke5SCYbbih7btjBMqwXcoibbR'}
             onChangeAmount={setAmount}
             ratioButton={null}
           />
@@ -35,7 +78,7 @@ const MintPool = () => {
           />
         </Col>
         <Col>
-          <Button type="primary" block onClick={onSwap}>
+          <Button type="primary" block onClick={onSell}>
             Swap
           </Button>
         </Col>

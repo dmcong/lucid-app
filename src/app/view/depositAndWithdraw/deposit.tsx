@@ -63,10 +63,10 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
           </Col>
           <Col>
             <NumericInput
+              bordered={false}
               style={{
                 color: '#000000',
                 textAlign: 'center',
-                border: 'none',
                 fontSize: '20px',
                 fontWeight: 700,
               }}
@@ -107,10 +107,10 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
           </Col>
           <Col>
             <NumericInput
+              bordered={false}
               style={{
                 color: '#000000',
                 textAlign: 'center',
-                border: 'none',
                 fontSize: '20px',
                 fontWeight: 700,
               }}

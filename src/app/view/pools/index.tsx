@@ -19,7 +19,7 @@ import { notifyError, notifySuccess } from 'app/helper'
 import { useLucid } from 'app/hooks/useLucid'
 
 type CardValueProps = { label?: string; value?: ReactNode; action?: ReactNode }
-const CardValue = ({ label = '', value, action }: CardValueProps) => {
+export const CardValue = ({ label = '', value, action }: CardValueProps) => {
   return (
     <Card
       bordered={false}
@@ -125,7 +125,7 @@ const Pools = () => {
           <Col xs={24} lg={8}>
             <CardValue
               label="YOUR POSITION"
-              value={<span>${numeric(myLiquidity).format('0,0.00[00]a')}</span>}
+              value={<span>${numeric(myLiquidity).format('0,0.00[00]')}</span>}
               action={<ActionClaim />}
             />
           </Col>

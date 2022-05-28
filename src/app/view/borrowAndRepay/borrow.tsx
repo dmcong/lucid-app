@@ -12,7 +12,7 @@ import { useLucid } from 'app/hooks/useLucid'
 import { useOracles } from 'app/hooks/useOracles'
 import { notifyError, notifySuccess } from 'app/helper'
 
-const Withdraw = ({ poolAddress }: PoolDetailsProps) => {
+const Borrow = ({ poolAddress }: PoolDetailsProps) => {
   const [amount, setAmount] = useState('0')
   const [loading, setLoading] = useState(false)
   const pools = useSelector((state: AppState) => state.pools)
@@ -25,7 +25,7 @@ const Withdraw = ({ poolAddress }: PoolDetailsProps) => {
     try {
       setLoading(true)
       const amountBN = await decimalizeMintAmount(amount, lptMint)
-      const { txId } = await lucid.removeLiquidity(poolAddress, amountBN)
+      const { txId } = await lucid.borrow(poolAddress, amountBN)
       return notifySuccess('Deposited', txId)
     } catch (error) {
       notifyError(error)
@@ -43,7 +43,6 @@ const Withdraw = ({ poolAddress }: PoolDetailsProps) => {
       </Col>
       <Col span={24}>
         <NumericInput
-          bordered={false}
           onValue={setAmount}
           style={{
             color: '#000000',
@@ -63,11 +62,11 @@ const Withdraw = ({ poolAddress }: PoolDetailsProps) => {
       </Col>
       <Col span={24}>
         <Button block loading={loading} onClick={onWithdraw} type="primary">
-          Withdraw
+          Borrow
         </Button>
       </Col>
     </Row>
   )
 }
 
-export default Withdraw
+export default Borrow

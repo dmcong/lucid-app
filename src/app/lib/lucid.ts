@@ -420,6 +420,11 @@ export type Lucid = {
           isSigner: false
         },
         {
+          name: 'baseMint'
+          isMut: false
+          isSigner: false
+        },
+        {
           name: 'stableMint'
           isMut: true
           isSigner: false
@@ -440,6 +445,11 @@ export type Lucid = {
           isSigner: false
         },
         {
+          name: 'baseTreasury'
+          isMut: true
+          isSigner: false
+        },
+        {
           name: 'lptTreasury'
           isMut: true
           isSigner: false
@@ -450,7 +460,7 @@ export type Lucid = {
           isSigner: false
         },
         {
-          name: 'stableTokenAccount'
+          name: 'baseTokenAccount'
           isMut: true
           isSigner: false
         },
@@ -865,6 +875,127 @@ export type Lucid = {
         },
       ]
     },
+    {
+      name: 'initializeJupiter'
+      accounts: [
+        {
+          name: 'authority'
+          isMut: true
+          isSigner: true
+        },
+        {
+          name: 'jupiter'
+          isMut: true
+          isSigner: true
+        },
+        {
+          name: 'treasurer'
+          isMut: false
+          isSigner: false
+        },
+        {
+          name: 'baseMint'
+          isMut: true
+          isSigner: false
+        },
+        {
+          name: 'systemProgram'
+          isMut: false
+          isSigner: false
+        },
+        {
+          name: 'tokenProgram'
+          isMut: false
+          isSigner: false
+        },
+        {
+          name: 'associatedTokenProgram'
+          isMut: false
+          isSigner: false
+        },
+        {
+          name: 'rent'
+          isMut: false
+          isSigner: false
+        },
+      ]
+      args: []
+    },
+    {
+      name: 'swapJupiter'
+      accounts: [
+        {
+          name: 'authority'
+          isMut: true
+          isSigner: true
+        },
+        {
+          name: 'jupiter'
+          isMut: true
+          isSigner: false
+        },
+        {
+          name: 'treasurer'
+          isMut: false
+          isSigner: false
+        },
+        {
+          name: 'baseMint'
+          isMut: true
+          isSigner: false
+        },
+        {
+          name: 'mint'
+          isMut: false
+          isSigner: false
+        },
+        {
+          name: 'mintTreasury'
+          isMut: true
+          isSigner: false
+        },
+        {
+          name: 'tokenAccount'
+          isMut: true
+          isSigner: false
+        },
+        {
+          name: 'baseTokenAccount'
+          isMut: true
+          isSigner: false
+        },
+        {
+          name: 'systemProgram'
+          isMut: false
+          isSigner: false
+        },
+        {
+          name: 'tokenProgram'
+          isMut: false
+          isSigner: false
+        },
+        {
+          name: 'associatedTokenProgram'
+          isMut: false
+          isSigner: false
+        },
+        {
+          name: 'rent'
+          isMut: false
+          isSigner: false
+        },
+      ]
+      args: [
+        {
+          name: 'amountIn'
+          type: 'u64'
+        },
+        {
+          name: 'amountOut'
+          type: 'u64'
+        },
+      ]
+    },
   ]
   accounts: [
     {
@@ -907,6 +1038,18 @@ export type Lucid = {
           {
             name: 'baseAmount'
             type: 'u64'
+          },
+        ]
+      }
+    },
+    {
+      name: 'jupiter'
+      type: {
+        kind: 'struct'
+        fields: [
+          {
+            name: 'baseMint'
+            type: 'publicKey'
           },
         ]
       }
@@ -1418,6 +1561,11 @@ export const IDL: Lucid = {
           isSigner: false,
         },
         {
+          name: 'baseMint',
+          isMut: false,
+          isSigner: false,
+        },
+        {
           name: 'stableMint',
           isMut: true,
           isSigner: false,
@@ -1438,6 +1586,11 @@ export const IDL: Lucid = {
           isSigner: false,
         },
         {
+          name: 'baseTreasury',
+          isMut: true,
+          isSigner: false,
+        },
+        {
           name: 'lptTreasury',
           isMut: true,
           isSigner: false,
@@ -1448,7 +1601,7 @@ export const IDL: Lucid = {
           isSigner: false,
         },
         {
-          name: 'stableTokenAccount',
+          name: 'baseTokenAccount',
           isMut: true,
           isSigner: false,
         },
@@ -1863,6 +2016,127 @@ export const IDL: Lucid = {
         },
       ],
     },
+    {
+      name: 'initializeJupiter',
+      accounts: [
+        {
+          name: 'authority',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'jupiter',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'treasurer',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'baseMint',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'systemProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'tokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'associatedTokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [],
+    },
+    {
+      name: 'swapJupiter',
+      accounts: [
+        {
+          name: 'authority',
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: 'jupiter',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'treasurer',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'baseMint',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'mint',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'mintTreasury',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'tokenAccount',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'baseTokenAccount',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'systemProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'tokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'associatedTokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'rent',
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: 'amountIn',
+          type: 'u64',
+        },
+        {
+          name: 'amountOut',
+          type: 'u64',
+        },
+      ],
+    },
   ],
   accounts: [
     {
@@ -1905,6 +2179,18 @@ export const IDL: Lucid = {
           {
             name: 'baseAmount',
             type: 'u64',
+          },
+        ],
+      },
+    },
+    {
+      name: 'jupiter',
+      type: {
+        kind: 'struct',
+        fields: [
+          {
+            name: 'baseMint',
+            type: 'publicKey',
           },
         ],
       },

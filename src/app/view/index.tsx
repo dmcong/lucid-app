@@ -21,9 +21,7 @@ const View = () => {
   }, [setBackground])
 
   const onCreateNewToken = async () => {
-    console.log('zo ')
     const mint = await newToken(provider)
-    console.log('mint', mint)
   }
 
   return (

@@ -31,14 +31,11 @@ const Deposit = ({ poolAddress }: { poolAddress: string }) => {
     let debt = 0
     let baseAmount = 0
     try {
-      console.log('accouts.cheque', accouts.cheque)
       const debtAccount = await lucid.program.account.cheque.fetch(
         accouts.cheque,
       )
-      console.log('debtAccount', debtAccount)
       //@ts-ignore
       debt = Number(undecimalize(debtAccount.borrowAmount, 9))
-      console.log('debt', debtAccount.authority.toBase58())
       baseAmount = Number(undecimalize(debtAccount.baseAmount, 9))
     } catch (error) {}
     setLptLocked(String(debt))

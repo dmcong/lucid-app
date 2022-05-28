@@ -1,5 +1,4 @@
 import { Fragment, ReactNode, useCallback, useState } from 'react'
-import { net } from 'shared/runtime'
 import { numeric } from 'shared/util'
 import { BN } from 'bn.js'
 
@@ -11,11 +10,11 @@ import { notifyError, notifySuccess } from 'app/helper'
 import { useOracles } from 'app/hooks/useOracles'
 import { useLucid } from 'app/hooks/useLucid'
 
-const MINT_USDC = {
-  devnet: '2z6Ci38Cx6PyL3tFrT95vbEeB3izqpoLdxxBkJk2euyj',
-  testnet: '',
-  mainnet: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-}
+import configs from 'app/configs'
+
+const {
+  sol: { baseMint },
+} = configs
 const HARDCODE_POOL_ADDRESS = 'FHvzpH2y1G3hNppMsVcj8Mi8Nc5kAkvQi5G2Uj4hZjz5'
 const DEFAULT_AMOUNT = new BN(0)
 
@@ -34,17 +33,17 @@ const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
   const [visible, setVisible] = useState(false)
   const [amount, setAmount] = useState('0')
   const [loading, setLoading] = useState(false)
-  const mintUSDC = MINT_USDC[net]
-  const { balance } = useAccountBalanceByMintAddress(mintUSDC)
+  const { balance } = useAccountBalanceByMintAddress(baseMint)
   const { decimalizeMintAmount } = useOracles()
   const lucid = useLucid()
+
   const disabled = !Number(amount) || Number(amount) > Number(balance)
 
   const onJoin = useCallback(async () => {
     if (disabled) return
     try {
       setLoading(true)
-      const baseAmount = await decimalizeMintAmount(amount, mintUSDC)
+      const baseAmount = await decimalizeMintAmount(amount, baseMint)
 
       const { txId } = await lucid.addLiquidity(
         HARDCODE_POOL_ADDRESS,
@@ -59,7 +58,7 @@ const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
     } finally {
       setLoading(false)
     }
-  }, [decimalizeMintAmount, amount, disabled, lucid, mintUSDC])
+  }, [decimalizeMintAmount, amount, disabled, lucid])
 
   return (
     <Fragment>
@@ -97,7 +96,7 @@ const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
                   value={amount}
                   onValue={setAmount}
                   className="join-input"
-                  suffix={<MintSymbol mintAddress={mintUSDC} />}
+                  suffix={<MintSymbol mintAddress={baseMint} />}
                 />
               </Col>
               <Col>
@@ -124,7 +123,7 @@ const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
                       <Typography.Text>
                         {numeric(amount).format('0,0.[0000]')}
                       </Typography.Text>
-                      <MintSymbol mintAddress={mintUSDC} />
+                      <MintSymbol mintAddress={baseMint} />
                     </Space>
                   }
                 />
@@ -144,7 +143,7 @@ const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
               <Col span={24}>
                 <RowContent
                   label="Token will reward"
-                  value={<MintAvatar mintAddress={mintUSDC} />}
+                  value={<MintAvatar mintAddress={baseMint} />}
                 />
               </Col>
             </Row>

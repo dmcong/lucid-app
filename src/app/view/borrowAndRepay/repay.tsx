@@ -21,7 +21,6 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
   const { undecimalize } = useOracles()
   const [lptLocked, setLptLocked] = useState('0')
   const [baseAmount, setBaseAmout] = useState('0')
-  const [baseAmountBN, setBaseAmoutBN] = useState(new BN(0))
   const { wallet } = useWallet()
 
   const fetchDebt = useCallback(async () => {
@@ -43,7 +42,6 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
       debt = Number(undecimalize(debtAccount.borrowAmount, 9))
       console.log('debt', debtAccount.authority.toBase58())
       baseAmount = Number(undecimalize(debtAccount.baseAmount, 9))
-      setBaseAmoutBN(debtAccount.baseAmount)
     } catch (error) {}
     setLptLocked(String(debt))
     setBaseAmout(String(baseAmount))
@@ -62,7 +60,7 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
   const onDeposit = async () => {
     try {
       setLoading(true)
-      const { txId } = await lucid.repay(poolAddress, baseAmountBN)
+      const { txId } = await lucid.repay(poolAddress)
       return notifySuccess('Replay', txId)
     } catch (error) {
       notifyError(error)

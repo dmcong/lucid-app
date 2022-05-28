@@ -125,7 +125,7 @@ const Pools = () => {
           <Col xs={24} lg={8}>
             <CardValue
               label="YOUR POSITION"
-              value={<span>${numeric(myLiquidity).format('0,0.00[00]a')}</span>}
+              value={<span>${numeric(myLiquidity).format('0,0.00[00]')}</span>}
               action={<ActionClaim />}
             />
           </Col>

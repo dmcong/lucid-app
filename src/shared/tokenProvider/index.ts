@@ -33,9 +33,10 @@ class TokenProvider {
       // Start
       this.loading = true
       // Build token list
-      let tokenList = await (await new TokenListProvider().resolve())
-        .filterByChainId(this.chainId)
-        .getList()
+      let tokenList: any[] = []
+      // await (await new TokenListProvider().resolve())
+      //   .filterByChainId(this.chainId)
+      //   .getList()
       if (this.cluster === 'devnet') tokenList = tokenList.concat(supplementary)
       if (this.cluster === 'testnet')
         tokenList = tokenList.concat([sntr(102), sol(102)])

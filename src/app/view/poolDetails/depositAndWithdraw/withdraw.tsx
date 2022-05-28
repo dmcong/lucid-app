@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Button, Col, Row } from 'antd'
+import { Button, Col, Row, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 import { PoolDetailsProps } from '../index'
 
@@ -17,7 +17,7 @@ const Withdraw = ({ poolAddress }: PoolDetailsProps) => {
   const [loading, setLoading] = useState(false)
   const pools = useSelector((state: AppState) => state.pools)
   const { lptMint } = pools[poolAddress]
-  const balance = useAccountBalanceByMintAddress(lptMint.toBase58())
+  const { balance } = useAccountBalanceByMintAddress(lptMint.toBase58())
   const lucid = useLucid()
   const { decimalizeMintAmount } = useOracles()
 
@@ -25,7 +25,6 @@ const Withdraw = ({ poolAddress }: PoolDetailsProps) => {
     try {
       setLoading(true)
       const amountBN = await decimalizeMintAmount(amount, lptMint)
-      console.log(amountBN.toNumber(), 'amountBN')
       const { txId } = await lucid.removeLiquidity(poolAddress, amountBN)
       return notifySuccess('Deposited', txId)
     } catch (error) {
@@ -37,9 +36,29 @@ const Withdraw = ({ poolAddress }: PoolDetailsProps) => {
 
   return (
     <Row gutter={[24, 24]}>
-      <Col span={24}>Available: {numeric(balance.balance).format('0,0')}</Col>
       <Col span={24}>
-        <NumericInput onValue={setAmount} />
+        <Typography.Text style={{ color: '#000000' }}>
+          Available: {numeric(balance).format('0,0')}
+        </Typography.Text>
+      </Col>
+      <Col span={24}>
+        <NumericInput
+          onValue={setAmount}
+          style={{
+            color: '#000000',
+            fontSize: '20px',
+            fontWeight: 700,
+          }}
+          value={amount}
+          suffix={
+            <Button
+              type="primary"
+              onClick={() => setAmount(balance.toString())}
+            >
+              Max
+            </Button>
+          }
+        />
       </Col>
       <Col span={24}>
         <Button block loading={loading} onClick={onWithdraw} type="primary">

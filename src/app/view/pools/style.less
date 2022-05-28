@@ -3,6 +3,10 @@
   background: rgba(255, 255, 255, 0.12) !important;
   backdrop-filter: blur(20px);
   cursor: pointer;
+  transition: all 0.15s linear;
+  // &.active {
+  //   border-radius: 44px 44px 0 0 !important;
+  // }
   .symbol {
     color: #6d90ff !important;
     font-weight: 600 !important;
@@ -32,8 +36,30 @@
   position: relative;
   .lucid-image {
     position: absolute !important;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 18px;
     left: -5px;
+    z-index: -2;
+  }
+}
+// Expand card
+.lucid-expand-card {
+  position: relative;
+  top: -40px;
+  background: rgba(255, 255, 255, 0.29) !important;
+  border: none !important;
+  border-radius: 0 0 44px 44px !important;
+  z-index: -1;
+  .lucid-collapse-header {
+    padding: 0 !important;
+    border: none !important;
+  }
+  .lucid-collapse-content-box {
+    padding: 55px 16px 24px 16px !important;
+  }
+  .lucid-collapse-item {
+    border: none !important;
+  }
+  & *:not(button) {
+    background-color: transparent !important;
   }
 }

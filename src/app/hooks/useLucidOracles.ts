@@ -204,5 +204,5 @@ export const useLucidOracles = () => {
     return amounts_out
   }
 
-  return {}
+  return { calcDepositInfo, calcMintReceivesRemoveFullSide }
 }

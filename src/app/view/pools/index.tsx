@@ -51,7 +51,7 @@ const Pools = () => {
   const pools = useSelector((state: AppState) => state.pools)
 
   return (
-    <Row gutter={[48, 48]} justify="center" align="middle">
+    <Row gutter={[48, 48]}>
       <Col span={24}>
         <Row gutter={[24, 24]}>
           <Col xs={24} lg={8}>

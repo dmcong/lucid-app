@@ -176,6 +176,7 @@ const JoinAction = ({ poolAddress }: JoinActionProps) => {
                     fontSize: 40,
                     fontWeight: 700,
                     textAlign: 'right',
+                    color: '#000000',
                   }}
                 />
               </Col>

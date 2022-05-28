@@ -155,7 +155,9 @@ const Deposit = ({
           <Col>
             <Button
               type="primary"
-              onClick={() => setAmount(baseBalanceOfAddress.balance.toString())}
+              onClick={() =>
+                setBaseAmount(baseBalanceOfAddress.balance.toString())
+              }
             >
               MAX
             </Button>

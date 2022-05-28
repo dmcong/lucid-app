@@ -13,7 +13,9 @@ const DepositAndWithdraw = ({ poolAddress }: { poolAddress: string }) => {
 
   return (
     <Fragment>
-      <ButtonNeon onClick={() => setVisible(true)}>Deposit/Withdraw</ButtonNeon>
+      <ButtonNeon onClick={() => setVisible(true)}>
+        Deposit / Withdraw
+      </ButtonNeon>
       <Modal
         visible={visible}
         closeIcon={<IonIcon name="close-outline" />}

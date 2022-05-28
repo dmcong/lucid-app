@@ -13,9 +13,6 @@ const BuyAndSell = ({ poolAddress }: { poolAddress: string }) => {
 
   return (
     <Fragment>
-      {/* <Button type="primary" onClick={() => setVisible(true)}>
-        Buy / Sell
-      </Button> */}
       <ButtonNeon onClick={() => setVisible(true)}>Buy / Sell</ButtonNeon>
       <Modal
         visible={visible}

@@ -19,7 +19,7 @@ import { notifyError, notifySuccess } from 'app/helper'
 import { useLucid } from 'app/hooks/useLucid'
 
 type CardValueProps = { label?: string; value?: ReactNode; action?: ReactNode }
-const CardValue = ({ label = '', value, action }: CardValueProps) => {
+export const CardValue = ({ label = '', value, action }: CardValueProps) => {
   return (
     <Card
       bordered={false}

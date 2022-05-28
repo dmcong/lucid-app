@@ -11,13 +11,15 @@ import { numeric } from 'shared/util'
 import { useLucid } from 'app/hooks/useLucid'
 import { useOracles } from 'app/hooks/useOracles'
 import { notifyError, notifySuccess } from 'app/helper'
-import { MintSymbol } from 'shared/antd/mint'
+import { usePoolData } from 'app/hooks/pool/usePoolData'
+import { usePoolPrices } from 'app/hooks/pool/usePoolPrices'
+import { usePoolAmounts } from 'app/hooks/pool/usePoolAmounts'
 
 const Borrow = ({ poolAddress }: PoolDetailsProps) => {
   const [amount, setAmount] = useState('0')
   const [loading, setLoading] = useState(false)
-  const pools = useSelector((state: AppState) => state.pools)
-  const { lptMint } = pools[poolAddress]
+  const { lptMint } = usePoolData(poolAddress)
+  const poolPrices = usePoolPrices(poolAddress)
   const { balance } = useAccountBalanceByMintAddress(lptMint.toBase58())
   const lucid = useLucid()
   const { decimalizeMintAmount } = useOracles()
@@ -46,7 +48,7 @@ const Borrow = ({ poolAddress }: PoolDetailsProps) => {
           </Col>
           <Col>
             <Typography.Text style={{ color: '#000000' }}>
-              Available: {numeric(balance).format('0,0')}
+              Available: {numeric(balance).format('0,0.[000]')}
             </Typography.Text>
           </Col>
         </Row>
@@ -81,32 +83,23 @@ const Borrow = ({ poolAddress }: PoolDetailsProps) => {
             </Space>
           </Col>
           <Col span={24}>
-            <Typography.Title level={4}>Review</Typography.Title>
+            <Typography.Title level={4} style={{ color: '#000000' }}>
+              Review
+            </Typography.Title>
           </Col>
+
           <Col span={24}>
             <Row>
               <Col flex="auto">
                 <Typography.Text style={{ color: '#000000' }}>
-                  User borrow limit
+                  Total Borrow
                 </Typography.Text>
               </Col>
               <Col>
                 <Typography.Title level={4} style={{ color: '#000000' }}>
-                  {numeric(amount).format('0,0.[000]')}
-                </Typography.Title>
-              </Col>
-            </Row>
-          </Col>
-          <Col span={24}>
-            <Row>
-              <Col flex="auto">
-                <Typography.Text style={{ color: '#000000' }}>
-                  My supply
-                </Typography.Text>
-              </Col>
-              <Col>
-                <Typography.Title level={4} style={{ color: '#000000' }}>
-                  {numeric(amount).format('0,0.[000]')}
+                  {numeric((Number(amount) * poolPrices.lptPrice) / 2).format(
+                    '$0,0.[000]',
+                  )}
                 </Typography.Title>
               </Col>
             </Row>

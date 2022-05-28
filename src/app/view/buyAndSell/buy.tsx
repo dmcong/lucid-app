@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Button, Col, Row } from 'antd'
+import { Button, Card, Col, Row, Space } from 'antd'
 import MintInput from 'app/components/mintInput'
 import IonIcon from '@sentre/antd-ionicon'
 
@@ -13,6 +13,9 @@ import configs from 'app/configs'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { useLucidOracles } from 'app/hooks/useLucidOracles'
 import { usePoolData } from 'app/hooks/pool/usePoolData'
+import Selection from 'app/components/selection'
+import { MintAvatar } from 'shared/antd/mint'
+import NumericInput from 'shared/antd/numericInput'
 
 type BuyProps = {
   poolAddress: string
@@ -67,41 +70,83 @@ const Buy = ({ poolAddress }: BuyProps) => {
   }
 
   return (
-    <Row gutter={[12, 12]} justify="center">
+    <Row gutter={[24, 24]} justify="center">
       <Col span={24}>
-        <MintInput
-          amount={amount}
-          selectedMint={baseMint}
-          onChangeAmount={onChangeAmount}
-          ratioButton={
-            <Button
-              type="primary"
-              onClick={() => setAmount(balance.toString())}
+        <Row>
+          <Col span={24}>
+            <Card
+              bordered={false}
+              style={{
+                borderRadius: 4,
+                background: 'rgb(20 20 20 / 10%)',
+                boxShadow: 'unset',
+              }}
             >
-              Max
-            </Button>
-          }
-        />
-      </Col>
-      <Col>
-        <Button
-          className="btn-switch-type"
-          size="small"
-          icon={
-            <IonIcon style={{ color: '#000000' }} name="git-compare-outline" />
-          }
-        />
-      </Col>
-      <Col span={24}>
-        <MintInput
-          amount={receive}
-          selectedMint={mintAddress}
-          onChangeAmount={setReceive}
-        />
+              <Row gutter={[24, 24]} align="middle">
+                <Col span={4}>
+                  <Selection
+                    mintAvatar={<MintAvatar mintAddress={baseMint} />}
+                    selectedMint={baseMint}
+                  />
+                </Col>
+                <Col span={20}>
+                  <Space>
+                    <NumericInput
+                      bordered={false}
+                      style={{
+                        color: '#000',
+                        fontSize: 32,
+                        textAlign: 'right',
+                      }}
+                      value={amount}
+                      onValue={setReceive}
+                    />
+                    <Button
+                      type="primary"
+                      onClick={() => setAmount(balance.toString())}
+                    >
+                      Max
+                    </Button>
+                  </Space>
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+          <Col>
+            <IonIcon style={{ color: '#000000' }} name="arrow-down-outline" />
+          </Col>
+          <Col span={24}>
+            <Card
+              bordered={false}
+              style={{
+                borderRadius: 4,
+                background: 'rgb(20 20 20 / 10%)',
+                boxShadow: 'unset',
+              }}
+            >
+              <Row gutter={[24, 24]} align="middle">
+                <Col span={4}>
+                  <Selection
+                    mintAvatar={<MintAvatar mintAddress={mintAddress} />}
+                    selectedMint={mintAddress}
+                  />
+                </Col>
+                <Col span={20}>
+                  <NumericInput
+                    bordered={false}
+                    style={{ color: '#000', fontSize: 32, textAlign: 'right' }}
+                    value={amount}
+                    onValue={setReceive}
+                  />
+                </Col>
+              </Row>
+            </Card>
+          </Col>
+        </Row>
       </Col>
       <Col span={24}>
         <Button loading={loading} type="primary" block onClick={onBuy}>
-          Swap
+          Buy
         </Button>
       </Col>
     </Row>

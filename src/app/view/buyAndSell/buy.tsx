@@ -1,13 +1,12 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
-import { Button, Card, Col, Row, Space } from 'antd'
-import MintInput from 'app/components/mintInput'
+import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { useLucid } from 'app/hooks/useLucid'
 import { notifyError, notifySuccess } from 'app/helper'
 import { useOracles } from 'app/hooks/useOracles'
-import { useSelector } from 'react-redux'
 import { AppState } from 'app/model'
 import configs from 'app/configs'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
@@ -77,12 +76,31 @@ const Buy = ({ poolAddress }: BuyProps) => {
             <Card
               bordered={false}
               style={{
-                borderRadius: 4,
+                borderRadius: '4px 4px 0 0',
                 background: 'rgb(20 20 20 / 10%)',
                 boxShadow: 'unset',
               }}
             >
-              <Row gutter={[24, 24]} align="middle">
+              <Row align="middle" justify="end">
+                <Col>
+                  <Space
+                    onClick={() => setAmount(balance.toString())}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <Typography.Text
+                      type="secondary"
+                      style={{ textDecoration: 'under-line' }}
+                    >
+                      Available:
+                    </Typography.Text>
+                    <Typography.Text
+                      style={{ color: '#000', textDecoration: 'under-line' }}
+                    >
+                      {balance}
+                    </Typography.Text>
+                  </Space>
+                </Col>
+                <Col span={24} />
                 <Col span={4}>
                   <Selection
                     mintAvatar={<MintAvatar mintAddress={baseMint} />}
@@ -90,36 +108,40 @@ const Buy = ({ poolAddress }: BuyProps) => {
                   />
                 </Col>
                 <Col span={20}>
-                  <Space>
-                    <NumericInput
-                      bordered={false}
-                      style={{
-                        color: '#000',
-                        fontSize: 32,
-                        textAlign: 'right',
-                      }}
-                      value={amount}
-                      onValue={setReceive}
-                    />
-                    <Button
-                      type="primary"
-                      onClick={() => setAmount(balance.toString())}
-                    >
-                      Max
-                    </Button>
-                  </Space>
+                  <NumericInput
+                    bordered={false}
+                    style={{
+                      color: '#000',
+                      fontSize: 32,
+                      textAlign: 'right',
+                    }}
+                    value={amount}
+                    onValue={onChangeAmount}
+                  />
                 </Col>
               </Row>
             </Card>
           </Col>
-          <Col>
-            <IonIcon style={{ color: '#000000' }} name="arrow-down-outline" />
+          <Col span={24} style={{ position: 'relative', minHeight: 2 }}>
+            <IonIcon
+              style={{
+                position: 'absolute',
+                color: '#000000',
+                borderRadius: 99,
+                border: '2px solid #e2f8f4',
+                left: '50%',
+                background: '#c9e3d9',
+                top: -8,
+                zIndex: 99,
+              }}
+              name="arrow-down-outline"
+            />
           </Col>
           <Col span={24}>
             <Card
               bordered={false}
               style={{
-                borderRadius: 4,
+                borderRadius: '0 0 4px 4px',
                 background: 'rgb(20 20 20 / 10%)',
                 boxShadow: 'unset',
               }}
@@ -131,13 +153,18 @@ const Buy = ({ poolAddress }: BuyProps) => {
                     selectedMint={mintAddress}
                   />
                 </Col>
-                <Col span={20}>
-                  <NumericInput
-                    bordered={false}
-                    style={{ color: '#000', fontSize: 32, textAlign: 'right' }}
-                    value={amount}
-                    onValue={setReceive}
-                  />
+                <Col span={20} style={{ textAlign: 'right' }}>
+                  <Typography.Text
+                    style={{
+                      color: '#000',
+                      fontSize: 32,
+                      paddingRight: 10,
+                      paddingLeft: 32,
+                    }}
+                    ellipsis
+                  >
+                    {receive}
+                  </Typography.Text>
                 </Col>
               </Row>
             </Card>

@@ -2,20 +2,20 @@ import { Fragment, useState } from 'react'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { Button, Col, Modal, Row, Segmented } from 'antd'
-import Deposit from './deposit'
-import Withdraw from './withdraw'
-import { SegmentedValue } from 'antd/lib/segmented'
+import Repay from './repay'
+import Borrow from './borrow'
 
 import { PoolDetailsProps } from '../poolDetails/index'
+import { SegmentedValue } from 'antd/lib/segmented'
 
-const DepositAndWithdraw = ({ poolAddress }: PoolDetailsProps) => {
+const BorrowAnhRepay = ({ poolAddress }: PoolDetailsProps) => {
   const [visible, setVisible] = useState(false)
-  const [value, setValue] = useState<SegmentedValue>('Deposit')
+  const [value, setValue] = useState<SegmentedValue>('Borrow')
 
   return (
     <Fragment>
       <Button type="primary" onClick={() => setVisible(true)}>
-        Deposit/Withdraw
+        Borrow / Repay
       </Button>
       <Modal
         visible={visible}
@@ -29,14 +29,14 @@ const DepositAndWithdraw = ({ poolAddress }: PoolDetailsProps) => {
             <Segmented
               value={value}
               onChange={(value) => setValue(value)}
-              options={['Deposit', 'Withdraw']}
+              options={['Borrow', 'Repay']}
             />
           </Col>
           <Col span={24}>
-            {value === 'Deposit' ? (
-              <Deposit poolAddress={poolAddress} />
+            {value === 'Borrow' ? (
+              <Borrow poolAddress={poolAddress} />
             ) : (
-              <Withdraw poolAddress={poolAddress} />
+              <Repay poolAddress={poolAddress} />
             )}
           </Col>
         </Row>
@@ -45,4 +45,4 @@ const DepositAndWithdraw = ({ poolAddress }: PoolDetailsProps) => {
   )
 }
 
-export default DepositAndWithdraw
+export default BorrowAnhRepay

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { Button, Card, Col, Row } from 'antd'
+import { Button, Col, Row } from 'antd'
 import MintInput from 'app/components/mintInput'
 import IonIcon from '@sentre/antd-ionicon'
 

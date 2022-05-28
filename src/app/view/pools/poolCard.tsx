@@ -5,7 +5,7 @@ import IonIcon from '@sentre/antd-ionicon'
 import { Button, Card, Col, Collapse, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintName, MintSymbol } from 'shared/antd/mint'
 import CardContent from './cardContent'
-import BuyAndSell from '../poolDetails/buyAndSell'
+import BuyAndSell from '../buyAndSell'
 
 import { AppState } from 'app/model'
 import { usePoolFees } from 'app/hooks/pool/usePoolFees'
@@ -14,7 +14,9 @@ import { numeric } from 'shared/util'
 import './style.less'
 import DepositAndWithdraw from '../depositAndWithdraw'
 import { usePoolTvl } from 'app/hooks/pool/usePoolTvl'
+import useAPR from 'app/hooks/pool/useAPR'
 import { useMyLiquidity } from 'app/hooks/pool/useMyLiquidity'
+import BorrowAnhRepay from '../borrowAndRepay'
 
 type PoolCardProps = { rank: number; poolAddress: string }
 
@@ -23,6 +25,7 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
   const poolData = useSelector((state: AppState) => state.pools[poolAddress])
   const fee = usePoolFees(poolAddress)
   const tvl = usePoolTvl(poolAddress)
+  const apr = useAPR(poolAddress)
   const myLiquidity = useMyLiquidity(poolAddress)
 
   const onActive = () => {
@@ -62,7 +65,7 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
             <CardContent
               primary
               label="APY"
-              value={numeric(Math.random()).format('0.00[00]%')}
+              value={numeric(apr).format('0.00[00]%')}
             />
           </Col>
           <Col span={4}>
@@ -92,7 +95,12 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
               style={{ padding: 0, background: 'transparent' }}
               onClick={() => {}}
             >
-              <IonIcon name="arrow-forward-outline" style={{ fontSize: 32 }} />
+              <IonIcon
+                name={
+                  activeKey ? 'arrow-down-outline' : 'arrow-forward-outline'
+                }
+                style={{ fontSize: 32 }}
+              />
             </Button>
           </Col>
         </Row>
@@ -102,7 +110,12 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
           <Row gutter={[24, 24]}>
             <Col>
               <BuyAndSell poolAddress={poolAddress} />
+            </Col>
+            <Col>
               <DepositAndWithdraw poolAddress={poolAddress} />
+            </Col>
+            <Col>
+              <BorrowAnhRepay poolAddress={poolAddress} />
             </Col>
           </Row>
         </Collapse.Panel>

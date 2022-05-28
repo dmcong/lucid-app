@@ -1,13 +1,17 @@
-import { usePoolData } from './usePoolData'
+import { useMemo } from 'react'
+import { usePoolAmounts } from './usePoolAmounts'
 import { usePoolDay } from './usePoolDay'
 
 const useAPR = (poolAddress: string) => {
-  const pool = usePoolData(poolAddress)
+  const amounts = usePoolAmounts(poolAddress)
   const day = usePoolDay(poolAddress)
 
-  const feePerDay = pool.totalLptFee.toNumber() / day
-  const roi = feePerDay / pool.lptSupply.toNumber()
+  const apr = useMemo(() => {
+    const feePerDay = amounts.lptFeeAmount / day
+    const roi = feePerDay / amounts.lptAmount
+    return Number(Number(roi * 365 * 100).toFixed(6))
+  }, [amounts.lptAmount, amounts.lptFeeAmount, day])
 
-  return Number(Number(roi * 365).toFixed(6))
+  return apr
 }
 export default useAPR

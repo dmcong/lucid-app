@@ -5,8 +5,8 @@ import { SegmentedValue } from 'antd/lib/segmented'
 import MintPool from './buy'
 
 const BuyAndSell = ({ poolAddress }: { poolAddress: string }) => {
-  const [visible, setVisible] = useState(true)
-  const [value, setValue] = useState<SegmentedValue>('buy')
+  const [visible, setVisible] = useState(false)
+  const [value, setValue] = useState<SegmentedValue>('Buy')
 
   return (
     <Fragment>
@@ -25,11 +25,11 @@ const BuyAndSell = ({ poolAddress }: { poolAddress: string }) => {
             <Segmented
               value={value}
               onChange={(value) => setValue(value)}
-              options={['buy', 'sell']}
+              options={['Buy', 'Sell']}
             />
           </Col>
           <Col span={24}>
-            {value === 'buy' ? <MintPool poolAddress={poolAddress} /> : <></>}
+            {value === 'Buy' ? <MintPool poolAddress={poolAddress} /> : <></>}
           </Col>
         </Row>
       </Modal>

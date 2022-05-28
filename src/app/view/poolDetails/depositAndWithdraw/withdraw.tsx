@@ -25,6 +25,7 @@ const Withdraw = ({ poolAddress }: PoolDetailsProps) => {
     try {
       setLoading(true)
       const amountBN = await decimalizeMintAmount(amount, lptMint)
+      console.log(amountBN.toNumber(), 'amountBN')
       const { txId } = await lucid.removeLiquidity(poolAddress, amountBN)
       return notifySuccess('Deposited', txId)
     } catch (error) {
@@ -36,7 +37,7 @@ const Withdraw = ({ poolAddress }: PoolDetailsProps) => {
 
   return (
     <Row gutter={[24, 24]}>
-      <Col span={24}>Available: {numeric(balance.amount).format('0,0')}</Col>
+      <Col span={24}>Available: {numeric(balance.balance).format('0,0')}</Col>
       <Col span={24}>
         <NumericInput onValue={setAmount} />
       </Col>

@@ -5,12 +5,7 @@ import { useMint } from '@senhub/providers'
 
 import { Button, Col, Modal, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
-import {
-  MintAvatar,
-  MintName,
-  MintSelection,
-  MintSymbol,
-} from 'shared/antd/mint'
+import { MintAvatar, MintName, MintSelection } from 'shared/antd/mint'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { notifyError, notifySuccess } from 'app/helper'
 import { useOracles } from 'app/hooks/useOracles'
@@ -31,7 +26,9 @@ type RowContentProps = { label?: string; value?: ReactNode }
 const RowContent = ({ label = '', value }: RowContentProps) => {
   return (
     <Row gutter={[24, 24]}>
-      <Col flex="auto">{label}</Col>
+      <Col flex="auto" style={{ color: '#000000' }}>
+        {label}
+      </Col>
       <Col>{value}</Col>
     </Row>
   )
@@ -66,7 +63,6 @@ const JoinAction = ({ poolAddress }: JoinActionProps) => {
       if (!isBaseMint)
         await lucid.swapJupiter(baseMint, mint, amountBN, amountOutBN)
 
-      console.log('amountOutBN', amountOutBN.toNumber())
       const { txId } = await lucid.addLiquidity(
         bestPoolAddress,
         DEFAULT_AMOUNT,
@@ -125,21 +121,49 @@ const JoinAction = ({ poolAddress }: JoinActionProps) => {
         onCancel={() => setVisible(false)}
         footer={false}
         closable={false}
+        className="lucid-modal-gradient"
       >
         <Row gutter={[24, 24]} justify="end" align="middle">
-          <Col>
-            <Space size={6}>
-              <Typography.Text type="secondary">Available:</Typography.Text>
-              <Typography.Text
-                style={{ cursor: 'pointer', textDecoration: 'underline' }}
-                onClick={() => setAmount(balance.toString())}
-              >
-                {numeric(balance).format('0,0.[0000]')}
-              </Typography.Text>
-            </Space>
+          <Col span={24} style={{ textAlign: 'center' }}>
+            <Typography.Title style={{ color: '#000000' }} level={3}>
+              Join with best pool
+            </Typography.Title>
           </Col>
-          <Col>
-            <MintSelection value={mint} onChange={setMint} />
+          <Col span={24}>
+            <Row>
+              <Col flex="auto">
+                <MintSelection
+                  style={{
+                    background: '#F4FCEB',
+                    color: '#000000',
+                    borderRadius: 32,
+                    height: 40,
+                    width: 135,
+                  }}
+                  value={mint}
+                  onChange={setMint}
+                />
+              </Col>
+              <Col>
+                <Space size={6}>
+                  <Typography.Text
+                    style={{ color: '#000000' }}
+                    type="secondary"
+                  >
+                    Available:
+                  </Typography.Text>
+                  <Typography.Text
+                    style={{
+                      cursor: 'pointer',
+                      color: '#000000',
+                    }}
+                    onClick={() => setAmount(balance.toString())}
+                  >
+                    {numeric(balance).format('0,0.[0000]')}
+                  </Typography.Text>
+                </Space>
+              </Col>
+            </Row>
           </Col>
           <Col span={24}>
             <Row gutter={[24, 24]} wrap={false} align="middle">
@@ -148,15 +172,17 @@ const JoinAction = ({ poolAddress }: JoinActionProps) => {
                   bordered={false}
                   value={amount}
                   onValue={setAmount}
-                  className="join-input"
-                  suffix={<MintSymbol mintAddress={mint} />}
+                  style={{
+                    fontSize: 40,
+                    fontWeight: 700,
+                    textAlign: 'right',
+                  }}
                 />
               </Col>
               <Col>
                 <Button
-                  ghost
+                  type="primary"
                   onClick={() => setAmount(balance.toString())}
-                  style={{ borderRadius: 999 }}
                 >
                   Max
                 </Button>
@@ -164,7 +190,9 @@ const JoinAction = ({ poolAddress }: JoinActionProps) => {
             </Row>
           </Col>
           <Col span={24}>
-            <Typography.Title level={5}>Review</Typography.Title>
+            <Typography.Title style={{ color: '#000000' }} level={5}>
+              Review
+            </Typography.Title>
           </Col>
           <Col span={24}>
             <Row gutter={[8, 8]}>
@@ -173,7 +201,7 @@ const JoinAction = ({ poolAddress }: JoinActionProps) => {
                   label="Total Value"
                   value={
                     <Space>
-                      <Typography.Text>
+                      <Typography.Text style={{ color: '#000000' }}>
                         ${numeric(total).format('0,0.[0000]')}
                       </Typography.Text>
                     </Space>
@@ -185,7 +213,7 @@ const JoinAction = ({ poolAddress }: JoinActionProps) => {
                 <RowContent
                   label="HakaPool will Join"
                   value={
-                    <Space>
+                    <Space style={{ color: '#000000' }}>
                       <MintName mintAddress={bestPoolData.mint.toBase58()} />
                       <MintAvatar mintAddress={bestPoolData.mint.toBase58()} />
                     </Space>

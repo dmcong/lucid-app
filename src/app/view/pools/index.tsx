@@ -169,6 +169,7 @@ const Pools = () => {
           </Typography.Text>
         </Space>
       </Col>
+      <Col span={24} />
     </Row>
   )
 }

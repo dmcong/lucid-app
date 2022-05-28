@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Button, Col, Row, Space, Typography } from 'antd'
+import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 
 import { AppState } from 'app/model'
@@ -46,39 +46,49 @@ const Withdraw = ({ poolAddress }: { poolAddress: string }) => {
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
-        <Row>
-          <Col flex="auto" />
-          <Col>
-            <Typography.Text style={{ color: '#000000' }}>
-              Available: {numeric(balance).format('0,0')}
-            </Typography.Text>
-          </Col>
-        </Row>
-      </Col>
-      <Col span={24}>
-        <Row gutter={[24, 24]} wrap={false} align="middle">
-          <Col flex="auto">
-            <NumericInput
-              bordered={false}
-              onValue={setAmount}
-              style={{
-                fontSize: 35,
-                fontWeight: 700,
-                textAlign: 'right',
-                color: '#000000',
-              }}
-              value={amount}
-            />
-          </Col>
-          <Col>
-            <Button
-              type="primary"
-              onClick={() => setAmount(balance.toString())}
-            >
-              Max
-            </Button>
-          </Col>
-        </Row>
+        <Card
+          bordered={false}
+          style={{
+            borderRadius: 4,
+            background: 'rgb(20 20 20 / 10%)',
+            boxShadow: 'unset',
+          }}
+        >
+          <Row justify="end">
+            <Col>
+              <Space
+                onClick={() => setAmount(balance.toString())}
+                size={6}
+                style={{ cursor: 'pointer' }}
+              >
+                <Typography.Text
+                  type="secondary"
+                  style={{ textDecoration: 'underline' }}
+                >
+                  Available:
+                </Typography.Text>
+                <Typography.Text
+                  style={{ color: '#000000', textDecoration: 'underline' }}
+                >
+                  {numeric(balance).format('0,0')}
+                </Typography.Text>
+              </Space>
+            </Col>
+            <Col span={24}>
+              <NumericInput
+                bordered={false}
+                onValue={setAmount}
+                style={{
+                  fontSize: 35,
+                  fontWeight: 700,
+                  textAlign: 'right',
+                  color: '#000000',
+                }}
+                value={amount}
+              />
+            </Col>
+          </Row>
+        </Card>
       </Col>
       <Col span={24}>
         <Typography.Title level={5} style={{ color: '#000000' }}>
@@ -87,27 +97,50 @@ const Withdraw = ({ poolAddress }: { poolAddress: string }) => {
       </Col>
       <Col span={24}>
         <Row gutter={[8, 8]}>
-          <Col span={24}>
-            <Space>
-              <Typography.Text style={{ color: '#000000' }}>
-                {numeric(usdReceive).format('0,0.[000]')}
-              </Typography.Text>
-              <Typography.Text style={{ color: '#000000' }}>
-                <MintSymbol mintAddress={baseMint.toBase58()} />
-              </Typography.Text>
-              <MintAvatar mintAddress={baseMint.toBase58()} />
-            </Space>
+          <Col span={12}>
+            <Card
+              bordered={false}
+              style={{
+                borderRadius: '4px 0 0 4px',
+                background: 'rgb(20 20 20 / 10%)',
+                boxShadow: 'unset',
+              }}
+            >
+              <Space direction="vertical">
+                <Space>
+                  <MintAvatar mintAddress={baseMint.toBase58()} />
+                  <Typography.Text style={{ color: '#000000' }}>
+                    <MintSymbol mintAddress={baseMint.toBase58()} />
+                  </Typography.Text>
+                </Space>
+                <Typography.Text style={{ color: '#000000' }}>
+                  {numeric(usdReceive).format('0,0.[000]')}
+                </Typography.Text>
+              </Space>
+            </Card>
           </Col>
-          <Col span={24}>
-            <Space>
-              <Typography.Text style={{ color: '#000000' }}>
-                {numeric(tokenReceive).format('0,0.[000]')}
-              </Typography.Text>
-              <Typography.Text style={{ color: '#000000' }}>
-                <MintSymbol mintAddress={mint.toBase58()} />
-              </Typography.Text>
-              <MintAvatar mintAddress={mint.toBase58()} />
-            </Space>
+          <Col span={12}>
+            <Card
+              bordered={false}
+              style={{
+                borderRadius: '0 4px 4px 0',
+                background: 'rgb(20 20 20 / 10%)',
+                boxShadow: 'unset',
+              }}
+              bodyStyle={{ textAlign: 'right' }}
+            >
+              <Space direction="vertical">
+                <Space>
+                  <Typography.Text style={{ color: '#000000' }}>
+                    <MintSymbol mintAddress={mint.toBase58()} />
+                  </Typography.Text>
+                  <MintAvatar mintAddress={mint.toBase58()} />
+                </Space>
+                <Typography.Text style={{ color: '#000000' }}>
+                  {numeric(tokenReceive).format('0,0.[000]')}
+                </Typography.Text>
+              </Space>
+            </Card>
           </Col>
         </Row>
       </Col>

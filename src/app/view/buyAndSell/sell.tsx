@@ -89,12 +89,12 @@ const Sell = ({ poolAddress }: BuyProps) => {
                   >
                     <Typography.Text
                       type="secondary"
-                      style={{ textDecoration: 'under-line' }}
+                      style={{ textDecoration: 'underline' }}
                     >
                       Available:
                     </Typography.Text>
                     <Typography.Text
-                      style={{ color: '#000', textDecoration: 'under-line' }}
+                      style={{ color: '#000', textDecoration: 'underline' }}
                     >
                       {balance}
                     </Typography.Text>

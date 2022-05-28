@@ -106,26 +106,20 @@ const JoinAction = ({ poolAddress }: JoinActionProps) => {
 
   return (
     <Fragment>
-      <Col flex="auto">
-        {/* eslint-disable jsx-a11y/no-redundant-roles */}
-        <button
-          className="button-53"
-          role="button"
-          onClick={() => setVisible(true)}
-        >
-          Join Now
-        </button>
-        {/* <div className="btn-group">
+      <div className="btn-bg joinnow">
+        <div className="btn-group">
           <div className="btn ball">
-            <button>
-              <div className="joinnow-ball"></div>Join now
-              <span data-letters="Go!"></span>
-              <span data-letters="Go!"></span>
+            <button onClick={() => setVisible(true)}>
+              <div className="joinnow-ball"></div>
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a>
+                Join now<span data-letters="Go!"></span>
+                <span data-letters="Go!"></span>
+              </a>
             </button>
           </div>
-        </div> */}
-      </Col>
-
+        </div>
+      </div>
       <Modal
         visible={visible}
         onCancel={() => setVisible(false)}

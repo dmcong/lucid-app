@@ -5,7 +5,7 @@ import { SegmentedValue } from 'antd/lib/segmented'
 import MintPool from './buy'
 
 const BuyAndSell = ({ poolAddress }: { poolAddress: string }) => {
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(false)
   const [value, setValue] = useState<SegmentedValue>('buy')
 
   return (

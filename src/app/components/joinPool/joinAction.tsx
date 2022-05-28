@@ -62,14 +62,25 @@ const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
 
   return (
     <Fragment>
-      <Button
-        type="primary"
-        style={{ borderRadius: 999 }}
-        onClick={() => setVisible(true)}
-        block
-      >
-        Join now
-      </Button>
+      <Col flex="auto">
+        {/* eslint-disable jsx-a11y/no-redundant-roles */}
+        <button
+          className="button-53"
+          role="button"
+          onClick={() => setVisible(true)}
+        >
+          Join Now
+        </button>
+        {/* <Button
+          type="primary"
+          className="button-join"
+          
+          block
+        >
+          Join now
+        </Button> */}
+      </Col>
+
       <Modal
         visible={visible}
         onCancel={() => setVisible(false)}

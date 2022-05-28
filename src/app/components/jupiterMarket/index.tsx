@@ -16,7 +16,6 @@ const JupiterMarket = () => {
 
   const fetchJupiters = useCallback(async () => {
     const jupiters = await lucid.program.account.jupiter.all()
-    console.log('jupiters', jupiters)
     setJupiters(jupiters)
   }, [lucid.program.account.jupiter])
 
@@ -26,7 +25,6 @@ const JupiterMarket = () => {
 
   const onCreateJupiter = async () => {
     try {
-      console.log('on Create')
       const txid = await lucid.initializeJupiter()
       notifySuccess('Create', txid.txId)
     } catch (error) {}

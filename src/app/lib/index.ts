@@ -159,8 +159,6 @@ class LucidProgram {
     stableAmount: BN,
     baseAmount: BN,
   ) => {
-    console.log('mint', mint)
-    console.log('baseMint', baseMint)
     const pool = web3.Keypair.generate()
     const PDAs = await this.getPoolPDAs(pool.publicKey, mint, baseMint)
     const wallet = this._provider.wallet
@@ -398,9 +396,7 @@ class LucidProgram {
     }: web3.KeyedAccountInfo) => {
       const address = accountId.toBase58()
       try {
-        console.log('zo')
         const data = this.program.coder.accounts.decode('pool', buf)
-        console.log('pool data', data)
         return callback(null, {
           type: 'pool',
           address,

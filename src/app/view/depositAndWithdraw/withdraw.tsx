@@ -43,7 +43,6 @@ const Withdraw = ({ poolAddress }: PoolDetailsProps) => {
       </Col>
       <Col span={24}>
         <NumericInput
-          bordered={false}
           onValue={setAmount}
           style={{
             color: '#000000',

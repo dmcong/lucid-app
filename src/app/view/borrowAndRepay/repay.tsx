@@ -11,7 +11,6 @@ import { useWallet } from '@senhub/providers'
 import { usePoolData } from 'app/hooks/pool/usePoolData'
 import { numeric } from 'shared/util'
 import { usePoolPrices } from 'app/hooks/pool/usePoolPrices'
-import BN from 'bn.js'
 
 const Deposit = ({ poolAddress }: PoolDetailsProps) => {
   const poolData = usePoolData(poolAddress)

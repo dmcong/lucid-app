@@ -1,11 +1,9 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import { Button, Col, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 import { PoolDetailsProps } from '../poolDetails/index'
 
-import { AppState } from 'app/model'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { numeric } from 'shared/util'
 import { useLucid } from 'app/hooks/useLucid'
@@ -13,7 +11,6 @@ import { useOracles } from 'app/hooks/useOracles'
 import { notifyError, notifySuccess } from 'app/helper'
 import { usePoolData } from 'app/hooks/pool/usePoolData'
 import { usePoolPrices } from 'app/hooks/pool/usePoolPrices'
-import { usePoolAmounts } from 'app/hooks/pool/usePoolAmounts'
 
 const Borrow = ({ poolAddress }: PoolDetailsProps) => {
   const [amount, setAmount] = useState('0')

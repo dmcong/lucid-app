@@ -1,41 +1,56 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
+import isEqual from 'react-fast-compare'
 
 import { Button, Col, Row, Space, Typography } from 'antd'
-import { MintAvatar, MintSelection } from 'shared/antd/mint'
-import NumericInput from 'shared/antd/numericInput'
-import { PoolDetailsProps } from '../index'
+import { MintSelection } from 'shared/antd/mint'
 
 import { notifyError, notifySuccess } from 'app/helper'
 import { useLucid } from 'app/hooks/useLucid'
 import { AppState } from 'app/model'
 import { useOracles } from 'app/hooks/useOracles'
-import StableAvatar from 'app/components/stableAvatar'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { numeric } from 'shared/util'
-import { BN } from 'bn.js'
+import { PoolDetailsProps } from '../index'
+import NumericInput from 'shared/antd/numericInput'
 
 const Deposit = ({ poolAddress }: PoolDetailsProps) => {
   const pools = useSelector((state: AppState) => state.pools)
-  const { baseMint } = pools[poolAddress]
+  const { baseMint, mint, stableMint } = pools[poolAddress]
   const baseMintAddress = baseMint.toBase58()
-  const [mintAddress, setMintAddress] = useState(baseMintAddress)
+  const mintAddress = mint.toBase58()
+  const stableMintAddress = stableMint.toBase58()
+  const [unknownToken, setUnknownToken] = useState(baseMintAddress)
   const [amount, setAmount] = useState('0')
   const [loading, setLoading] = useState(false)
   const lucid = useLucid()
   const { decimalizeMintAmount } = useOracles()
-  const { balance } = useAccountBalanceByMintAddress(mintAddress)
+  const { balance } = useAccountBalanceByMintAddress(unknownToken)
+
+  const listAmount = useMemo(() => {
+    if (isEqual(unknownToken, mintAddress)) return [amount, 0, 0]
+    if (isEqual(unknownToken, baseMintAddress)) return [0, amount, 0]
+    if (isEqual(unknownToken, stableMintAddress)) return [0, 0, amount]
+    return [0, 0, 0]
+  }, [amount, baseMintAddress, mintAddress, stableMintAddress, unknownToken])
 
   const onDeposit = async () => {
     try {
       setLoading(true)
-      const amountBN = await decimalizeMintAmount(amount, baseMintAddress)
-
+      const amountBN = await decimalizeMintAmount(
+        listAmount[0],
+        baseMintAddress,
+      )
+      const baseBN = await decimalizeMintAmount(listAmount[1], baseMintAddress)
+      const stableBN = await decimalizeMintAmount(
+        listAmount[2],
+        baseMintAddress,
+      )
       const { txId } = await lucid.addLiquidity(
         poolAddress,
         amountBN,
-        new BN(0),
-        new BN(0),
+        stableBN,
+        baseBN,
       )
       return notifySuccess('Deposited', txId)
     } catch (error) {
@@ -63,9 +78,17 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
             </Button>
           </Col>
           <Col>
-            <Typography.Title style={{ color: '#000000' }} level={2}>
-              {numeric(amount).format('0,0.[000]')}
-            </Typography.Title>
+            <NumericInput
+              style={{
+                color: '#000000',
+                textAlign: 'center',
+                border: 'none',
+                fontSize: '20px',
+                fontWeight: 700,
+              }}
+              value={amount}
+              onValue={setAmount}
+            />
           </Col>
           <Col>
             <MintSelection
@@ -76,8 +99,8 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
                 height: 40,
                 width: 135,
               }}
-              value={mintAddress}
-              onChange={setMintAddress}
+              value={unknownToken}
+              onChange={setUnknownToken}
             />
           </Col>
         </Row>

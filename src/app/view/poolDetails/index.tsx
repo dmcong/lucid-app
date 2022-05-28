@@ -8,6 +8,8 @@ import Balances from './balances'
 import PoolInfo from './poolInfo'
 import Header from './header'
 
+import './index.less'
+
 export type PoolDetailsProps = {
   poolAddress: string
 }

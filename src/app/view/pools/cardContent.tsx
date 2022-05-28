@@ -4,17 +4,23 @@ import { ReactNode } from 'react'
 import IonIcon from '@sentre/antd-ionicon'
 import { MintAvatar } from 'shared/antd/mint'
 
+type CardContentProps = {
+  label?: string
+  tooltip?: ReactNode
+  value?: string
+  mintAddress?: string
+  primary?: boolean
+}
+
 const CardContent = ({
   label = '',
   tooltip,
   value = '',
   mintAddress,
-}: {
-  label?: string
-  tooltip?: ReactNode
-  value?: string
-  mintAddress?: string
-}) => {
+  primary,
+}: CardContentProps) => {
+  const priColor = primary ? { color: '#ABFC47' } : {}
+
   return (
     <Space direction="vertical" size={4}>
       <Space size={4}>
@@ -35,7 +41,9 @@ const CardContent = ({
         )}
       </Space>
       <Space size={4}>
-        <Typography.Title level={5}>{value}</Typography.Title>
+        <Typography.Title level={5} style={{ ...priColor }}>
+          {value}
+        </Typography.Title>
         <div style={{ marginTop: -3 }}>
           {mintAddress && <MintAvatar mintAddress={mintAddress} size={18} />}
         </div>

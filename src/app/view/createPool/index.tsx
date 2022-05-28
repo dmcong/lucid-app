@@ -9,7 +9,9 @@ const CreatePool = () => {
 
   return (
     <Fragment>
-      <Button onClick={() => setVisible(true)}>New</Button>
+      <Button type="primary" onClick={() => setVisible(true)}>
+        New
+      </Button>
       <Modal
         visible={visible}
         onCancel={() => setVisible(false)}

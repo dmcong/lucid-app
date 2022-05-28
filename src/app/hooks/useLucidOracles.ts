@@ -8,6 +8,7 @@ import {
   GENERAL_DECIMAL,
   STABLE_TOKEN_DECIMAL,
   LPT_DECIMAL,
+  GENERAL_NORMALIZED_NUMBER,
 } from 'app/constants'
 
 export type PoolPairLpData = {
@@ -204,5 +205,27 @@ export const useLucidOracles = () => {
     return amounts_out
   }
 
-  return { calcDepositInfo, calcMintReceivesRemoveFullSide }
+  const calcOutGivenInSwap = (
+    amountIn: number,
+    balanceOut: number,
+    balanceIn: number,
+    swapFee: number,
+  ): number => {
+    console.log(
+      'amountIn',
+      amountIn,
+      'balanceOut',
+      balanceOut,
+      'balanceIn:',
+      balanceIn,
+      'swapFee:',
+      swapFee,
+    )
+    // const numSwapFee = swapFee.toNumber() / GENERAL_NORMALIZED_NUMBER
+    const ratioBeforeAfterBalance = balanceIn / (balanceIn + amountIn)
+
+    return balanceOut * (1 - ratioBeforeAfterBalance) * (1 - swapFee)
+  }
+
+  return { calcDepositInfo, calcMintReceivesRemoveFullSide, calcOutGivenInSwap }
 }

@@ -17,6 +17,7 @@ const PoolInfo = ({ poolAddress }: PoolDetailsProps) => {
   const mintAddress = mint.toBase58()
   const tvl = usePoolTvl(poolAddress)
   const apr = useAPR(poolAddress)
+
   return (
     <Card>
       <Row gutter={[8, 8]}>

@@ -1,15 +1,7 @@
-import { useCallback } from 'react'
-import { Address, BN, web3 } from '@project-serum/anchor'
-import { useMint } from '@senhub/providers'
+import { BN } from '@project-serum/anchor'
 import util from '@senswap/sen-js/dist/utils'
 
-import {
-  BASE_TOKEN_DECIMAL,
-  GENERAL_DECIMAL,
-  STABLE_TOKEN_DECIMAL,
-  LPT_DECIMAL,
-  GENERAL_NORMALIZED_NUMBER,
-} from 'app/constants'
+import { GENERAL_DECIMAL, LPT_DECIMAL } from 'app/constants'
 
 export type PoolPairLpData = {
   balanceIn: BN
@@ -30,24 +22,6 @@ export type PoolPairData = {
 }
 
 export const useLucidOracles = () => {
-  const calcInitialLp = (
-    amount: BN,
-    decimal: number,
-    stableAmount: BN,
-    baseAmount: BN,
-  ): number => {
-    const amountNum = Number(
-      util.undecimalize(BigInt(amount.toString()), decimal),
-    )
-    const stableAmountNum = Number(
-      util.undecimalize(BigInt(stableAmount.toString()), STABLE_TOKEN_DECIMAL),
-    )
-    const baseAmountNum = Number(
-      util.undecimalize(BigInt(stableAmount.toString()), BASE_TOKEN_DECIMAL),
-    )
-    return amountNum ** 0.5 * (stableAmountNum + baseAmountNum) ** 0.5
-  }
-
   const calcLPOutGivenExactTokensIn = (
     tokenAmountIns: BN[],
     balanceIns: BN[],

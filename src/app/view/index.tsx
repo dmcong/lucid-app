@@ -8,21 +8,16 @@ import { useUI } from '@senhub/providers'
 import JupiterMarket from 'app/components/jupiterMarket'
 
 import Background from 'app/static/images/bg_lucid.svg'
-import { useProvider } from 'app/hooks/useLucid'
-import { newToken } from 'app/helper/mint'
 
 const View = () => {
   const { appRoute } = useAppRouter()
   const { setBackground } = useUI()
-  const provider = useProvider()
 
   useEffect(() => {
     setBackground({ light: Background, dark: Background })
   }, [setBackground])
 
-  const onCreateNewToken = async () => {
-    const mint = await newToken(provider)
-  }
+  const onCreateNewToken = async () => {}
 
   return (
     <Row gutter={[24, 24]} align="middle" justify="center">

@@ -11,6 +11,7 @@ import { useOracles } from 'app/hooks/useOracles'
 import { useLucid } from 'app/hooks/useLucid'
 
 import configs from 'app/configs'
+import './button.less'
 
 const {
   sol: { baseMint },
@@ -71,14 +72,15 @@ const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
         >
           Join Now
         </button>
-        {/* <Button
-          type="primary"
-          className="button-join"
-          
-          block
-        >
-          Join now
-        </Button> */}
+        {/* <div className="btn-group">
+          <div className="btn ball">
+            <button>
+              <div className="joinnow-ball"></div>Join now
+              <span data-letters="Go!"></span>
+              <span data-letters="Go!"></span>
+            </button>
+          </div>
+        </div> */}
       </Col>
 
       <Modal

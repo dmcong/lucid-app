@@ -18,7 +18,9 @@ const MintPool = ({ poolAddress }: MintPoolProps) => {
   const [loading, setLoading] = useState(false)
   const lucid = useLucid()
   const { decimalizeMintAmount } = useOracles()
-  const [baseMint, setBaseMint] = useState('')
+  const [baseMint, setBaseMint] = useState(
+    '2z6Ci38Cx6PyL3tFrT95vbEeB3izqpoLdxxBkJk2euyj',
+  )
   const [tokenMint, setTokenMint] = useState(
     'HJu2n1oZrjjxiCix442Ke5SCYbbih7btjBMqwXcoibbR',
   )

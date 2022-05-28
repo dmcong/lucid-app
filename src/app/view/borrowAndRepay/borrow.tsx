@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Button, Col, Row, Typography } from 'antd'
+import { Button, Col, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 import { PoolDetailsProps } from '../poolDetails/index'
 
@@ -11,6 +11,7 @@ import { numeric } from 'shared/util'
 import { useLucid } from 'app/hooks/useLucid'
 import { useOracles } from 'app/hooks/useOracles'
 import { notifyError, notifySuccess } from 'app/helper'
+import { MintSymbol } from 'shared/antd/mint'
 
 const Borrow = ({ poolAddress }: PoolDetailsProps) => {
   const [amount, setAmount] = useState('0')
@@ -37,28 +38,80 @@ const Borrow = ({ poolAddress }: PoolDetailsProps) => {
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
-        <Typography.Text style={{ color: '#000000' }}>
-          Available: {numeric(balance).format('0,0')}
-        </Typography.Text>
+        <Row>
+          <Col flex="auto">
+            <Typography.Text style={{ color: '#292321', fontSize: 12 }}>
+              You don't have to fear liquidation risk
+            </Typography.Text>
+          </Col>
+          <Col>
+            <Typography.Text style={{ color: '#000000' }}>
+              Available: {numeric(balance).format('0,0')}
+            </Typography.Text>
+          </Col>
+        </Row>
       </Col>
       <Col span={24}>
-        <NumericInput
-          onValue={setAmount}
-          style={{
-            color: '#000000',
-            fontSize: '20px',
-            fontWeight: 700,
-          }}
-          value={amount}
-          suffix={
+        <Row>
+          <Col flex="auto">
             <Button
               type="primary"
               onClick={() => setAmount(balance.toString())}
             >
               Max
             </Button>
-          }
-        />
+          </Col>
+          <Col>
+            <Space>
+              <NumericInput
+                bordered={false}
+                onValue={setAmount}
+                style={{
+                  color: '#000000',
+                  fontSize: 30,
+                  fontWeight: 700,
+                  width: 150,
+                  textAlign: 'right',
+                }}
+                value={amount}
+              />
+              <Typography.Title level={4} style={{ color: '#000000' }}>
+                LPT
+              </Typography.Title>
+            </Space>
+          </Col>
+          <Col span={24}>
+            <Typography.Title level={4}>Review</Typography.Title>
+          </Col>
+          <Col span={24}>
+            <Row>
+              <Col flex="auto">
+                <Typography.Text style={{ color: '#000000' }}>
+                  User borrow limit
+                </Typography.Text>
+              </Col>
+              <Col>
+                <Typography.Title level={4} style={{ color: '#000000' }}>
+                  {numeric(amount).format('0,0.[000]')}
+                </Typography.Title>
+              </Col>
+            </Row>
+          </Col>
+          <Col span={24}>
+            <Row>
+              <Col flex="auto">
+                <Typography.Text style={{ color: '#000000' }}>
+                  My supply
+                </Typography.Text>
+              </Col>
+              <Col>
+                <Typography.Title level={4} style={{ color: '#000000' }}>
+                  {numeric(amount).format('0,0.[000]')}
+                </Typography.Title>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
       </Col>
       <Col span={24}>
         <Button block loading={loading} onClick={onWithdraw} type="primary">

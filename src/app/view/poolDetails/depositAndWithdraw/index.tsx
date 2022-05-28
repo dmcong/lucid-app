@@ -1,11 +1,11 @@
 import { Fragment, useState } from 'react'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { Button, Modal, Tabs } from 'antd'
-import IonIcon from '@sentre/antd-ionicon'
 import Deposit from './deposit'
+import Withdraw from './withdraw'
 
 import { PoolDetailsProps } from '../index'
-import Withdraw from './withdraw'
 
 const DepositAndWithdraw = ({ poolAddress }: PoolDetailsProps) => {
   const [visible, setVisible] = useState(false)
@@ -19,6 +19,7 @@ const DepositAndWithdraw = ({ poolAddress }: PoolDetailsProps) => {
         closeIcon={<IonIcon name="close-outline" />}
         onCancel={() => setVisible(false)}
         footer={null}
+        className="lucid-modal-gradient"
       >
         <Tabs>
           <Tabs.TabPane key="deposit" tab="Deposit">

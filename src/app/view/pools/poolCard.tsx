@@ -15,6 +15,7 @@ import './style.less'
 import DepositAndWithdraw from '../depositAndWithdraw'
 import { usePoolTvl } from 'app/hooks/pool/usePoolTvl'
 import { useMyLiquidity } from 'app/hooks/pool/useMyLiquidity'
+import BorrowAnhRepay from '../borrowAndRepay'
 
 type PoolCardProps = { rank: number; poolAddress: string }
 
@@ -105,6 +106,9 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
             </Col>
             <Col>
               <DepositAndWithdraw poolAddress={poolAddress} />
+            </Col>
+            <Col>
+              <BorrowAnhRepay poolAddress={poolAddress} />
             </Col>
           </Row>
         </Collapse.Panel>

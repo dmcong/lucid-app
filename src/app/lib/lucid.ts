@@ -652,12 +652,7 @@ export type Lucid = {
           isSigner: false
         },
       ]
-      args: [
-        {
-          name: 'baseAmount'
-          type: 'u64'
-        },
-      ]
+      args: []
     },
     {
       name: 'buy'
@@ -1793,12 +1788,7 @@ export const IDL: Lucid = {
           isSigner: false,
         },
       ],
-      args: [
-        {
-          name: 'baseAmount',
-          type: 'u64',
-        },
-      ],
+      args: [],
     },
     {
       name: 'buy',

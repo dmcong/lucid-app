@@ -43,7 +43,11 @@ class LucidProgram {
   }
 
   getPools = async (): Promise<PoolsState> => {
-    const accounts = await this.program.account.pool.all()
+    let accounts = await this.program.account.pool.all()
+    accounts = accounts.sort(
+      (a, b) =>
+        b.account.totalLptFee.toNumber() - a.account.totalLptFee.toNumber(),
+    )
     const pools: PoolsState = {}
     for (const account of accounts) {
       pools[account.publicKey.toBase58()] = account.account
@@ -305,7 +309,7 @@ class LucidProgram {
     return { txId }
   }
 
-  repay = async (pool: Address, base_amount: BN) => {
+  repay = async (pool: Address) => {
     const { mint, baseMint } = await this.program.account.pool.fetch(pool)
     const PDAs = await this.getPoolPDAs(pool, mint, baseMint)
     const wallet = this._provider.wallet
@@ -316,7 +320,7 @@ class LucidProgram {
       baseMint,
     )
     const txId = await this.program.methods
-      .repay(base_amount)
+      .repay()
       .accounts({
         authority: wallet.publicKey,
         ...PDAs,

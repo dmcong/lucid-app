@@ -1,16 +1,17 @@
 import { useSelector } from 'react-redux'
-import { numeric } from 'shared/util'
+import { Fragment, useState } from 'react'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { Button, Card, Col, Collapse, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintName, MintSymbol } from 'shared/antd/mint'
 import CardContent from './cardContent'
+import BuyAndSell from '../poolDetails/buyAndSell'
 
 import { AppState } from 'app/model'
 import { usePoolFees } from 'app/hooks/pool/usePoolFees'
+import { numeric } from 'shared/util'
 
 import './style.less'
-import { Fragment, useState } from 'react'
 import DepositAndWithdraw from '../depositAndWithdraw'
 import { usePoolTvl } from 'app/hooks/pool/usePoolTvl'
 import { useMyLiquidity } from 'app/hooks/pool/useMyLiquidity'
@@ -101,6 +102,7 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
         <Collapse.Panel header={null} key={poolAddress} showArrow={false}>
           <Row gutter={[24, 24]}>
             <Col>
+              <BuyAndSell poolAddress={poolAddress} />
               <DepositAndWithdraw poolAddress={poolAddress} />
             </Col>
             <Col>

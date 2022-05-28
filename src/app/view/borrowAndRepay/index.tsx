@@ -1,18 +1,21 @@
 import { Fragment, useState } from 'react'
 import IonIcon from '@sentre/antd-ionicon'
 
-import { Button, Modal, Tabs } from 'antd'
+import { Button, Col, Modal, Row, Segmented } from 'antd'
 import Repay from './repay'
 import Borrow from './borrow'
 
 import { PoolDetailsProps } from '../poolDetails/index'
+import { SegmentedValue } from 'antd/lib/segmented'
 
 const BorrowAnhRepay = ({ poolAddress }: PoolDetailsProps) => {
   const [visible, setVisible] = useState(false)
+  const [value, setValue] = useState<SegmentedValue>('Borrow')
+
   return (
     <Fragment>
-      <Button type="primary" size="large" onClick={() => setVisible(true)}>
-        Borrow/Repay
+      <Button type="primary" onClick={() => setVisible(true)}>
+        Borrow / Repay
       </Button>
       <Modal
         visible={visible}
@@ -21,14 +24,22 @@ const BorrowAnhRepay = ({ poolAddress }: PoolDetailsProps) => {
         footer={null}
         className="lucid-modal-gradient"
       >
-        <Tabs>
-          <Tabs.TabPane key="Borrow" tab="Borrow">
-            <Borrow poolAddress={poolAddress} />
-          </Tabs.TabPane>
-          <Tabs.TabPane key="Repay" tab="Repay">
-            <Repay poolAddress={poolAddress} />
-          </Tabs.TabPane>
-        </Tabs>
+        <Row gutter={[24, 24]}>
+          <Col span={24} style={{ textAlign: 'center' }}>
+            <Segmented
+              value={value}
+              onChange={(value) => setValue(value)}
+              options={['Borrow', 'Repay']}
+            />
+          </Col>
+          <Col span={24}>
+            {value === 'Borrow' ? (
+              <Borrow poolAddress={poolAddress} />
+            ) : (
+              <Repay poolAddress={poolAddress} />
+            )}
+          </Col>
+        </Row>
       </Modal>
     </Fragment>
   )

@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react'
 import IonIcon from '@sentre/antd-ionicon'
 
-import { Button, Col, Modal, Row, Segmented, Tabs } from 'antd'
+import { Button, Col, Modal, Row, Segmented } from 'antd'
 import Deposit from './deposit'
 import Withdraw from './withdraw'
 import { SegmentedValue } from 'antd/lib/segmented'

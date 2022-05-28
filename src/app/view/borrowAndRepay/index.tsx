@@ -5,10 +5,9 @@ import { Button, Col, Modal, Row, Segmented } from 'antd'
 import Repay from './repay'
 import Borrow from './borrow'
 
-import { PoolDetailsProps } from '../poolDetails/index'
 import { SegmentedValue } from 'antd/lib/segmented'
 
-const BorrowAnhRepay = ({ poolAddress }: PoolDetailsProps) => {
+const BorrowAnhRepay = ({ poolAddress }: { poolAddress: string }) => {
   const [visible, setVisible] = useState(false)
   const [value, setValue] = useState<SegmentedValue>('Borrow')
 

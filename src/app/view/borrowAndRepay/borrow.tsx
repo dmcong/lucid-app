@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 import { Button, Col, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
-import { PoolDetailsProps } from '../poolDetails/index'
 
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { numeric } from 'shared/util'
@@ -12,7 +11,7 @@ import { notifyError, notifySuccess } from 'app/helper'
 import { usePoolData } from 'app/hooks/pool/usePoolData'
 import { usePoolPrices } from 'app/hooks/pool/usePoolPrices'
 
-const Borrow = ({ poolAddress }: PoolDetailsProps) => {
+const Borrow = ({ poolAddress }: { poolAddress: string }) => {
   const [amount, setAmount] = useState('0')
   const [loading, setLoading] = useState(false)
   const { lptMint } = usePoolData(poolAddress)

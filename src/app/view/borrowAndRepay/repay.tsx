@@ -5,14 +5,13 @@ import { notifyError, notifySuccess } from 'app/helper'
 import { useLucid } from 'app/hooks/useLucid'
 
 import { useOracles } from 'app/hooks/useOracles'
-import { PoolDetailsProps } from '../poolDetails/index'
 import { CardValue } from '../pools'
 import { useWallet } from '@senhub/providers'
 import { usePoolData } from 'app/hooks/pool/usePoolData'
 import { numeric } from 'shared/util'
 import { usePoolPrices } from 'app/hooks/pool/usePoolPrices'
 
-const Deposit = ({ poolAddress }: PoolDetailsProps) => {
+const Deposit = ({ poolAddress }: { poolAddress: string }) => {
   const poolData = usePoolData(poolAddress)
   const poolPrices = usePoolPrices(poolAddress)
   const [loading, setLoading] = useState(false)

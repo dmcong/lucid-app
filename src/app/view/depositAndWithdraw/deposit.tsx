@@ -11,13 +11,12 @@ import { AppState } from 'app/model'
 import { useOracles } from 'app/hooks/useOracles'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { numeric } from 'shared/util'
-import { PoolDetailsProps } from '../poolDetails/index'
 import NumericInput from 'shared/antd/numericInput'
 import { BN } from 'bn.js'
 import { useLucidOracles } from 'app/hooks/useLucidOracles'
 import { BASE_TOKEN_DECIMAL } from 'app/constants'
 
-const Deposit = ({ poolAddress }: PoolDetailsProps) => {
+const Deposit = ({ poolAddress }: { poolAddress: string }) => {
   const pools = useSelector((state: AppState) => state.pools)
   const { baseMint, mint, lptMint, balance, baseBalance, lptSupply, fee } =
     pools[poolAddress]

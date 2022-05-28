@@ -17,7 +17,7 @@ const Borrow = ({ poolAddress }: PoolDetailsProps) => {
   const [amount, setAmount] = useState('0')
   const [loading, setLoading] = useState(false)
   const pools = useSelector((state: AppState) => state.pools)
-  const { lptMint } = pools[poolAddress]
+  const { lptMint, baseMint } = pools[poolAddress]
   const { balance } = useAccountBalanceByMintAddress(lptMint.toBase58())
   const lucid = useLucid()
   const { decimalizeMintAmount } = useOracles()
@@ -46,7 +46,7 @@ const Borrow = ({ poolAddress }: PoolDetailsProps) => {
           </Col>
           <Col>
             <Typography.Text style={{ color: '#000000' }}>
-              Available: {numeric(balance).format('0,0')}
+              Available: {numeric(balance).format('0,0')} LPT
             </Typography.Text>
           </Col>
         </Row>
@@ -81,32 +81,21 @@ const Borrow = ({ poolAddress }: PoolDetailsProps) => {
             </Space>
           </Col>
           <Col span={24}>
-            <Typography.Title level={4}>Review</Typography.Title>
+            <Typography.Title style={{ color: '#000000' }} level={4}>
+              Review
+            </Typography.Title>
           </Col>
           <Col span={24}>
             <Row>
               <Col flex="auto">
                 <Typography.Text style={{ color: '#000000' }}>
-                  User borrow limit
+                  User USDC
                 </Typography.Text>
               </Col>
               <Col>
                 <Typography.Title level={4} style={{ color: '#000000' }}>
-                  {numeric(amount).format('0,0.[000]')}
-                </Typography.Title>
-              </Col>
-            </Row>
-          </Col>
-          <Col span={24}>
-            <Row>
-              <Col flex="auto">
-                <Typography.Text style={{ color: '#000000' }}>
-                  My supply
-                </Typography.Text>
-              </Col>
-              <Col>
-                <Typography.Title level={4} style={{ color: '#000000' }}>
-                  {numeric(amount).format('0,0.[000]')}
+                  {numeric(Number(amount) / 2).format('0,0.[000]')}{' '}
+                  <MintSymbol mintAddress={baseMint.toBase58()} />
                 </Typography.Title>
               </Col>
             </Row>

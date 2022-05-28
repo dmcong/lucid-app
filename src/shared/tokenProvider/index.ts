@@ -1,5 +1,5 @@
 import lunr, { Index } from 'lunr'
-import { TokenListProvider, TokenInfo } from '@solana/spl-token-registry'
+import { TokenInfo } from '@solana/spl-token-registry'
 
 import { net, chainId, ChainId, Net } from 'shared/runtime'
 import supplementary, { sntr, sol } from './supplementary'

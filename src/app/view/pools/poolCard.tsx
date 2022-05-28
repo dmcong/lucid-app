@@ -38,7 +38,7 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
         </Col>
         <Col span={4}>
           <Space direction="vertical">
-            <Typography.Title level={5}>
+            <Typography.Title level={5} ellipsis>
               <MintName mintAddress={poolData.mint.toBase58()} />
             </Typography.Title>
             <Typography.Title
@@ -53,6 +53,7 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
 
         <Col span={3}>
           <CardContent
+            primary
             label="APY"
             value={numeric(Math.random()).format('0.00[00]%')}
           />

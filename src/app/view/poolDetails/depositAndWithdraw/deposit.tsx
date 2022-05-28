@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Button, Col, Row, Space, Typography } from 'antd'
-import { MintAvatar } from 'shared/antd/mint'
+import { MintAvatar, MintSelection } from 'shared/antd/mint'
 import NumericInput from 'shared/antd/numericInput'
 import { PoolDetailsProps } from '../index'
 
@@ -11,35 +11,31 @@ import { useLucid } from 'app/hooks/useLucid'
 import { AppState } from 'app/model'
 import { useOracles } from 'app/hooks/useOracles'
 import StableAvatar from 'app/components/stableAvatar'
+import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
+import { numeric } from 'shared/util'
+import { BN } from 'bn.js'
 
 const Deposit = ({ poolAddress }: PoolDetailsProps) => {
   const pools = useSelector((state: AppState) => state.pools)
-  const [amount, setAmount] = useState('0')
-  const [amountBase, setAmountBase] = useState('0')
-  const [amountStable, setAmountStable] = useState('0')
-  const [loading, setLoading] = useState(false)
-  const { baseMint, mint, stableMint } = pools[poolAddress]
+  const { baseMint } = pools[poolAddress]
   const baseMintAddress = baseMint.toBase58()
-  const mintAddress = mint.toBase58()
+  const [mintAddress, setMintAddress] = useState(baseMintAddress)
+  const [amount, setAmount] = useState('0')
+  const [loading, setLoading] = useState(false)
   const lucid = useLucid()
-
-  console.log(mintAddress, 'mint Adrress')
-
   const { decimalizeMintAmount } = useOracles()
+  const { balance } = useAccountBalanceByMintAddress(mintAddress)
+
   const onDeposit = async () => {
     try {
       setLoading(true)
-      const amountBN = await decimalizeMintAmount(amount, mint)
-      const amountBaseBN = await decimalizeMintAmount(amountBase, baseMint)
-      const amountStableBN = await decimalizeMintAmount(
-        amountStable,
-        stableMint,
-      )
+      const amountBN = await decimalizeMintAmount(amount, baseMintAddress)
+
       const { txId } = await lucid.addLiquidity(
         poolAddress,
         amountBN,
-        amountStableBN,
-        amountBaseBN,
+        new BN(0),
+        new BN(0),
       )
       return notifySuccess('Deposited', txId)
     } catch (error) {
@@ -50,26 +46,73 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
   }
 
   return (
-    <Row gutter={[8, 8]}>
-      <Col span={24}>
-        <Typography.Title level={3}>Deposit</Typography.Title>
+    <Row gutter={[16, 16]} style={{ color: '#000000' }}>
+      <Col span={24} style={{ textAlign: 'right' }}>
+        <Typography.Text style={{ color: '#000000' }}>
+          Available: {numeric(balance).format('0,0.[000]')}
+        </Typography.Text>
       </Col>
       <Col span={24}>
-        <Space style={{ width: '100%' }}>
-          <MintAvatar mintAddress={mintAddress} />
-          <NumericInput onValue={setAmount} />
-        </Space>
+        <Row justify="space-between">
+          <Col>
+            <Button
+              type="primary"
+              onClick={() => setAmount(balance.toString())}
+            >
+              MAX
+            </Button>
+          </Col>
+          <Col>
+            <Typography.Title style={{ color: '#000000' }} level={2}>
+              {numeric(amount).format('0,0.[000]')}
+            </Typography.Title>
+          </Col>
+          <Col>
+            <MintSelection
+              style={{
+                background: '#F4FCEB',
+                color: '#000000',
+                borderRadius: 32,
+                height: 40,
+                width: 135,
+              }}
+              value={mintAddress}
+              onChange={setMintAddress}
+            />
+          </Col>
+        </Row>
       </Col>
       <Col span={24}>
-        <Space style={{ width: '100%' }}>
-          <MintAvatar mintAddress={baseMintAddress} />
-          <NumericInput onValue={setAmountBase} />
-        </Space>
+        <Typography.Title style={{ color: '#000000' }} level={4}>
+          Review
+        </Typography.Title>
       </Col>
       <Col span={24}>
-        <Space style={{ width: '100%' }}>
-          <StableAvatar mintAddresses={[mintAddress, baseMintAddress]} />
-          <NumericInput onValue={setAmountStable} />
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Row>
+            <Col flex="auto">
+              <Typography.Text style={{ color: '#000000' }}>
+                My supply
+              </Typography.Text>
+            </Col>
+            <Col>
+              <Typography.Title level={4} style={{ color: '#000000' }}>
+                {numeric(amount).format('0,0.[000]')}
+              </Typography.Title>
+            </Col>
+          </Row>
+          <Row>
+            <Col flex="auto">
+              <Typography.Text style={{ color: '#000000' }}>
+                You will receive
+              </Typography.Text>
+            </Col>
+            <Col>
+              <Typography.Title level={4} style={{ color: '#000000' }}>
+                {numeric(amount).format('0,0.[000]')}
+              </Typography.Title>
+            </Col>
+          </Row>
         </Space>
       </Col>
       <Col span={24}>

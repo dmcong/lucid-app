@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux'
 
 import { Button, Card, Col, Image, Row, Space, Typography } from 'antd'
 import PoolCard from './poolCard'
-import CreatePool from '../createPool'
 import JoinPool from 'app/components/joinPool'
 
 import { AppState } from 'app/model'
@@ -94,7 +93,7 @@ const Pools = () => {
         <JoinPool />
       </Col>
 
-      <Col flex="auto">
+      <Col span={18}>
         <Row gutter={[24, 24]} justify="center" align="middle">
           {Object.keys(pools).map((poolAddress, i) => (
             <Col span={24} key={poolAddress} className="wrap-card-pool">

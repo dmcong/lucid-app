@@ -34,7 +34,7 @@ const Borrow = ({ poolAddress }: { poolAddress: string }) => {
   }
 
   return (
-    <Row gutter={[24, 24]}>
+    <Row gutter={[12, 12]}>
       <Col span={24}>
         <Row>
           <Col flex="auto">
@@ -50,7 +50,7 @@ const Borrow = ({ poolAddress }: { poolAddress: string }) => {
         </Row>
       </Col>
       <Col span={24}>
-        <Row>
+        <Row align="middle">
           <Col flex="auto">
             <Button
               type="primary"
@@ -78,27 +78,26 @@ const Borrow = ({ poolAddress }: { poolAddress: string }) => {
               </Typography.Title>
             </Space>
           </Col>
-          <Col span={24}>
-            <Typography.Title level={4} style={{ color: '#000000' }}>
-              Review
-            </Typography.Title>
+        </Row>
+      </Col>
+      <Col span={24}>
+        <Typography.Title level={5} style={{ color: '#000000' }}>
+          Review
+        </Typography.Title>
+      </Col>
+      <Col span={24}>
+        <Row>
+          <Col flex="auto">
+            <Typography.Text style={{ color: '#000000' }}>
+              Total Borrow
+            </Typography.Text>
           </Col>
-
-          <Col span={24}>
-            <Row>
-              <Col flex="auto">
-                <Typography.Text style={{ color: '#000000' }}>
-                  Total Borrow
-                </Typography.Text>
-              </Col>
-              <Col>
-                <Typography.Title level={4} style={{ color: '#000000' }}>
-                  {numeric((Number(amount) * poolPrices.lptPrice) / 2).format(
-                    '$0,0.[000]',
-                  )}
-                </Typography.Title>
-              </Col>
-            </Row>
+          <Col>
+            <Typography.Title level={4} style={{ color: '#000000' }}>
+              {numeric((Number(amount) * poolPrices.lptPrice) / 2).format(
+                '$0,0.[000]',
+              )}
+            </Typography.Title>
           </Col>
         </Row>
       </Col>

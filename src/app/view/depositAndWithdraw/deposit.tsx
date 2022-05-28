@@ -2,40 +2,39 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Button, Col, Row, Space, Typography } from 'antd'
-import { MintAvatar, MintSelection } from 'shared/antd/mint'
-import NumericInput from 'shared/antd/numericInput'
-import { PoolDetailsProps } from '../index'
+import { MintSelection } from 'shared/antd/mint'
 
 import { notifyError, notifySuccess } from 'app/helper'
 import { useLucid } from 'app/hooks/useLucid'
 import { AppState } from 'app/model'
 import { useOracles } from 'app/hooks/useOracles'
-import StableAvatar from 'app/components/stableAvatar'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { numeric } from 'shared/util'
+import { PoolDetailsProps } from '../poolDetails/index'
+import NumericInput from 'shared/antd/numericInput'
 import { BN } from 'bn.js'
 
 const Deposit = ({ poolAddress }: PoolDetailsProps) => {
   const pools = useSelector((state: AppState) => state.pools)
-  const { baseMint } = pools[poolAddress]
-  const baseMintAddress = baseMint.toBase58()
-  const [mintAddress, setMintAddress] = useState(baseMintAddress)
+  const { baseMint, mint } = pools[poolAddress]
   const [amount, setAmount] = useState('0')
+  const [baseAmount, setBaseAmount] = useState('0')
   const [loading, setLoading] = useState(false)
   const lucid = useLucid()
   const { decimalizeMintAmount } = useOracles()
-  const { balance } = useAccountBalanceByMintAddress(mintAddress)
+  const mintBalance = useAccountBalanceByMintAddress(mint.toBase58())
+  const baseBalance = useAccountBalanceByMintAddress(baseMint.toBase58())
 
   const onDeposit = async () => {
     try {
       setLoading(true)
-      const amountBN = await decimalizeMintAmount(amount, baseMintAddress)
-
+      const amountBN = await decimalizeMintAmount(amount, mint)
+      const baseBN = await decimalizeMintAmount(baseAmount, baseMint)
       const { txId } = await lucid.addLiquidity(
         poolAddress,
         amountBN,
         new BN(0),
-        new BN(0),
+        baseBN,
       )
       return notifySuccess('Deposited', txId)
     } catch (error) {
@@ -49,7 +48,7 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
     <Row gutter={[16, 16]} style={{ color: '#000000' }}>
       <Col span={24} style={{ textAlign: 'right' }}>
         <Typography.Text style={{ color: '#000000' }}>
-          Available: {numeric(balance).format('0,0.[000]')}
+          Available: {numeric(mintBalance.balance).format('0,0.[000]')}
         </Typography.Text>
       </Col>
       <Col span={24}>
@@ -57,15 +56,23 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
           <Col>
             <Button
               type="primary"
-              onClick={() => setAmount(balance.toString())}
+              onClick={() => setAmount(mintBalance.balance.toString())}
             >
               MAX
             </Button>
           </Col>
           <Col>
-            <Typography.Title style={{ color: '#000000' }} level={2}>
-              {numeric(amount).format('0,0.[000]')}
-            </Typography.Title>
+            <NumericInput
+              style={{
+                color: '#000000',
+                textAlign: 'center',
+                border: 'none',
+                fontSize: '20px',
+                fontWeight: 700,
+              }}
+              value={amount}
+              onValue={setAmount}
+            />
           </Col>
           <Col>
             <MintSelection
@@ -76,12 +83,57 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
                 height: 40,
                 width: 135,
               }}
-              value={mintAddress}
-              onChange={setMintAddress}
+              disabled
+              value={mint.toBase58()}
             />
           </Col>
         </Row>
       </Col>
+      {/* Base Token */}
+      <Col span={24} style={{ textAlign: 'right' }}>
+        <Typography.Text style={{ color: '#000000' }}>
+          Available: {numeric(baseBalance.balance).format('0,0.[000]')}
+        </Typography.Text>
+      </Col>
+      <Col span={24}>
+        <Row justify="space-between">
+          <Col>
+            <Button
+              type="primary"
+              onClick={() => setAmount(baseBalance.balance.toString())}
+            >
+              MAX
+            </Button>
+          </Col>
+          <Col>
+            <NumericInput
+              style={{
+                color: '#000000',
+                textAlign: 'center',
+                border: 'none',
+                fontSize: '20px',
+                fontWeight: 700,
+              }}
+              value={baseAmount}
+              onValue={setBaseAmount}
+            />
+          </Col>
+          <Col>
+            <MintSelection
+              style={{
+                background: '#F4FCEB',
+                color: '#000000',
+                borderRadius: 32,
+                height: 40,
+                width: 135,
+              }}
+              disabled
+              value={baseMint.toBase58()}
+            />
+          </Col>
+        </Row>
+      </Col>
+      {/* Review */}
       <Col span={24}>
         <Typography.Title style={{ color: '#000000' }} level={4}>
           Review

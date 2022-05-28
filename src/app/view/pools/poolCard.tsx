@@ -12,6 +12,7 @@ import { usePoolFees } from 'app/hooks/pool/usePoolFees'
 
 import './style.less'
 import { Fragment, useState } from 'react'
+import DepositAndWithdraw from '../depositAndWithdraw'
 
 type PoolCardProps = { rank: number; poolAddress: string }
 
@@ -95,7 +96,9 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
       <Collapse activeKey={activeKey} className="lucid-expand-card">
         <Collapse.Panel header={null} key={poolAddress} showArrow={false}>
           <Row gutter={[24, 24]}>
-            <Col>content</Col>
+            <Col>
+              <DepositAndWithdraw poolAddress={poolAddress} />
+            </Col>
           </Row>
         </Collapse.Panel>
       </Collapse>

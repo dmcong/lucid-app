@@ -1,11 +1,12 @@
 import { Fragment, useState } from 'react'
 import IonIcon from '@sentre/antd-ionicon'
 
-import { Button, Col, Modal, Row, Segmented } from 'antd'
+import { Col, Modal, Row, Segmented } from 'antd'
 import Repay from './repay'
 import Borrow from './borrow'
 
 import { SegmentedValue } from 'antd/lib/segmented'
+import ButtonNeon from 'app/components/buttonNeon'
 
 const BorrowAnhRepay = ({ poolAddress }: { poolAddress: string }) => {
   const [visible, setVisible] = useState(false)
@@ -13,9 +14,7 @@ const BorrowAnhRepay = ({ poolAddress }: { poolAddress: string }) => {
 
   return (
     <Fragment>
-      <Button type="primary" onClick={() => setVisible(true)}>
-        Borrow / Repay
-      </Button>
+      <ButtonNeon onClick={() => setVisible(true)}>Borrow / Repay</ButtonNeon>
       <Modal
         visible={visible}
         closeIcon={<IonIcon name="close-outline" />}

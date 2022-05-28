@@ -1,17 +1,17 @@
 import { useSelector } from 'react-redux'
-import { numeric } from 'shared/util'
+import { Fragment, useState } from 'react'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { Button, Card, Col, Collapse, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintName, MintSymbol } from 'shared/antd/mint'
 import CardContent from './cardContent'
+import BuyAndSell from '../poolDetails/buyAndSell'
 
-import { useAppRouter } from 'app/hooks/useAppRouter'
 import { AppState } from 'app/model'
 import { usePoolFees } from 'app/hooks/pool/usePoolFees'
+import { numeric } from 'shared/util'
 
 import './style.less'
-import { Fragment, useState } from 'react'
 
 type PoolCardProps = { rank: number; poolAddress: string }
 
@@ -95,7 +95,9 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
       <Collapse activeKey={activeKey} className="lucid-expand-card">
         <Collapse.Panel header={null} key={poolAddress} showArrow={false}>
           <Row gutter={[24, 24]}>
-            <Col>content</Col>
+            <Col>
+              <BuyAndSell poolAddress={poolAddress} />
+            </Col>
           </Row>
         </Collapse.Panel>
       </Collapse>

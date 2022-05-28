@@ -1,21 +1,29 @@
-import { Fragment, ReactNode, useCallback, useState } from 'react'
-import { numeric } from 'shared/util'
+import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
+import { fetchCGK, numeric } from 'shared/util'
 import { BN } from 'bn.js'
 
 import { Button, Col, Modal, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
-import { MintAvatar, MintSymbol } from 'shared/antd/mint'
+import {
+  MintAvatar,
+  MintName,
+  MintSelection,
+  MintSymbol,
+} from 'shared/antd/mint'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { notifyError, notifySuccess } from 'app/helper'
 import { useOracles } from 'app/hooks/useOracles'
 import { useLucid } from 'app/hooks/useLucid'
 
 import configs from 'app/configs'
+import { useBestPoolAddress } from 'app/hooks/pool/useBestPoolData'
+import { usePoolData } from 'app/hooks/pool/usePoolData'
+import { useMint } from '@senhub/providers'
 
 const {
   sol: { baseMint },
 } = configs
-const HARDCODE_POOL_ADDRESS = 'FHvzpH2y1G3hNppMsVcj8Mi8Nc5kAkvQi5G2Uj4hZjz5'
+
 const DEFAULT_AMOUNT = new BN(0)
 
 type RowContentProps = { label?: string; value?: ReactNode }
@@ -29,12 +37,19 @@ const RowContent = ({ label = '', value }: RowContentProps) => {
 }
 
 type JoinActionProps = { poolAddress?: string }
-const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
+const JoinAction = ({ poolAddress }: JoinActionProps) => {
   const [visible, setVisible] = useState(false)
+  const [mint, setMint] = useState(baseMint)
   const [amount, setAmount] = useState('0')
+  const [total, setTotal] = useState('0')
   const [loading, setLoading] = useState(false)
-  const { balance } = useAccountBalanceByMintAddress(baseMint)
+  const { balance } = useAccountBalanceByMintAddress(mint)
   const { decimalizeMintAmount } = useOracles()
+  const { tokenProvider } = useMint()
+  let bestPoolAddress = useBestPoolAddress()
+  if (poolAddress) bestPoolAddress = poolAddress
+  const bestPoolData = usePoolData(bestPoolAddress)
+
   const lucid = useLucid()
 
   const disabled = !Number(amount) || Number(amount) > Number(balance)
@@ -43,13 +58,19 @@ const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
     if (disabled) return
     try {
       setLoading(true)
-      const baseAmount = await decimalizeMintAmount(amount, baseMint)
+      const amountBN = await decimalizeMintAmount(amount, mint)
+      const amountOutBN = await decimalizeMintAmount(total, baseMint)
+      const isBaseMint = mint === baseMint
 
+      if (!isBaseMint)
+        await lucid.swapJupiter(baseMint, mint, amountBN, amountOutBN)
+
+      console.log('amountOutBN', amountOutBN.toNumber())
       const { txId } = await lucid.addLiquidity(
-        HARDCODE_POOL_ADDRESS,
+        bestPoolAddress,
         DEFAULT_AMOUNT,
         DEFAULT_AMOUNT,
-        baseAmount,
+        isBaseMint ? amountBN : amountOutBN,
       )
       setVisible(false)
       return notifySuccess('Join Hakapool Successfully', txId)
@@ -58,7 +79,29 @@ const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
     } finally {
       setLoading(false)
     }
-  }, [decimalizeMintAmount, amount, disabled, lucid])
+  }, [
+    disabled,
+    decimalizeMintAmount,
+    amount,
+    mint,
+    total,
+    lucid,
+    bestPoolAddress,
+  ])
+
+  const fetchTotal = useCallback(async () => {
+    if (!mint) return
+    const tokenInfo = await tokenProvider.findByAddress(mint)
+    const ticket = tokenInfo?.extensions?.coingeckoId
+    if (ticket) {
+      const info = await fetchCGK(ticket)
+      return setTotal(String(Number(amount) * info.price))
+    }
+    return setTotal('0')
+  }, [amount, mint, tokenProvider])
+  useEffect(() => {
+    fetchTotal()
+  }, [fetchTotal])
 
   return (
     <Fragment>
@@ -71,14 +114,6 @@ const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
         >
           Join Now
         </button>
-        {/* <Button
-          type="primary"
-          className="button-join"
-          
-          block
-        >
-          Join now
-        </Button> */}
       </Col>
 
       <Modal
@@ -87,7 +122,7 @@ const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
         footer={false}
         closable={false}
       >
-        <Row gutter={[24, 24]} justify="end">
+        <Row gutter={[24, 24]} justify="end" align="middle">
           <Col>
             <Space size={6}>
               <Typography.Text type="secondary">Available:</Typography.Text>
@@ -99,6 +134,9 @@ const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
               </Typography.Text>
             </Space>
           </Col>
+          <Col>
+            <MintSelection value={mint} onChange={setMint} />
+          </Col>
           <Col span={24}>
             <Row gutter={[24, 24]} wrap={false} align="middle">
               <Col flex="auto">
@@ -107,7 +145,7 @@ const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
                   value={amount}
                   onValue={setAmount}
                   className="join-input"
-                  suffix={<MintSymbol mintAddress={baseMint} />}
+                  suffix={<MintSymbol mintAddress={mint} />}
                 />
               </Col>
               <Col>
@@ -128,33 +166,26 @@ const JoinAction = ({ poolAddress = '' }: JoinActionProps) => {
             <Row gutter={[8, 8]}>
               <Col span={24}>
                 <RowContent
-                  label="My supply"
+                  label="Total Value"
                   value={
                     <Space>
                       <Typography.Text>
-                        {numeric(amount).format('0,0.[0000]')}
+                        ${numeric(total).format('0,0.[0000]')}
                       </Typography.Text>
-                      <MintSymbol mintAddress={baseMint} />
                     </Space>
                   }
                 />
               </Col>
+
               <Col span={24}>
                 <RowContent
-                  label="Supply APR"
-                  value={<Typography.Text>0.45%</Typography.Text>}
-                />
-              </Col>
-              <Col span={24}>
-                <RowContent
-                  label="You will receive"
-                  value={<Typography.Text>14.2LP</Typography.Text>}
-                />
-              </Col>
-              <Col span={24}>
-                <RowContent
-                  label="Token will reward"
-                  value={<MintAvatar mintAddress={baseMint} />}
+                  label="HakaPool will Join"
+                  value={
+                    <Space>
+                      <MintName mintAddress={bestPoolData.mint.toBase58()} />
+                      <MintAvatar mintAddress={bestPoolData.mint.toBase58()} />
+                    </Space>
+                  }
                 />
               </Col>
             </Row>

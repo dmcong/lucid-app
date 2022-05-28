@@ -1,8 +1,11 @@
-import { Button, Col, Modal, Row, Segmented } from 'antd'
 import { Fragment, useState } from 'react'
 import IonIcon from '@sentre/antd-ionicon'
+
+import { Col, Modal, Row, Segmented } from 'antd'
 import { SegmentedValue } from 'antd/lib/segmented'
-import MintPool from './buy'
+import ButtonNeon from 'app/components/buttonNeon'
+import Buy from './buy'
+import Sell from './sell'
 
 const BuyAndSell = ({ poolAddress }: { poolAddress: string }) => {
   const [visible, setVisible] = useState(false)
@@ -10,9 +13,10 @@ const BuyAndSell = ({ poolAddress }: { poolAddress: string }) => {
 
   return (
     <Fragment>
-      <Button type="primary" onClick={() => setVisible(true)}>
+      {/* <Button type="primary" onClick={() => setVisible(true)}>
         Buy / Sell
-      </Button>
+      </Button> */}
+      <ButtonNeon onClick={() => setVisible(true)}>Buy / Sell</ButtonNeon>
       <Modal
         visible={visible}
         closeIcon={<IonIcon name="close-outline" />}
@@ -29,7 +33,11 @@ const BuyAndSell = ({ poolAddress }: { poolAddress: string }) => {
             />
           </Col>
           <Col span={24}>
-            {value === 'Buy' ? <MintPool poolAddress={poolAddress} /> : <></>}
+            {value === 'Buy' ? (
+              <Buy poolAddress={poolAddress} />
+            ) : (
+              <Sell poolAddress={poolAddress} />
+            )}
           </Col>
         </Row>
       </Modal>

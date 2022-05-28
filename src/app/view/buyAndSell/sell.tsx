@@ -22,7 +22,7 @@ const {
   sol: { baseMint },
 } = configs
 
-const Buy = ({ poolAddress }: BuyProps) => {
+const Sell = ({ poolAddress }: BuyProps) => {
   const [amount, setAmount] = useState('0')
   const [receive, setReceive] = useState('0')
   const [loading, setLoading] = useState(false)
@@ -108,4 +108,4 @@ const Buy = ({ poolAddress }: BuyProps) => {
   )
 }
 
-export default Buy
+export default Sell

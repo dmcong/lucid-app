@@ -96,9 +96,7 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
               onClick={() => {}}
             >
               <IonIcon
-                name={
-                  activeKey ? 'arrow-down-outline' : 'arrow-forward-outline'
-                }
+                name={activeKey ? 'chevron-up-outline' : 'chevron-down-outline'}
                 style={{ fontSize: 32 }}
               />
             </Button>

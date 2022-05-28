@@ -1,10 +1,11 @@
 import { Fragment, useState } from 'react'
 import IonIcon from '@sentre/antd-ionicon'
 
-import { Button, Col, Modal, Row, Segmented } from 'antd'
+import { Col, Modal, Row, Segmented } from 'antd'
 import Deposit from './deposit'
 import Withdraw from './withdraw'
 import { SegmentedValue } from 'antd/lib/segmented'
+import ButtonNeon from 'app/components/buttonNeon'
 
 const DepositAndWithdraw = ({ poolAddress }: { poolAddress: string }) => {
   const [visible, setVisible] = useState(false)
@@ -12,9 +13,7 @@ const DepositAndWithdraw = ({ poolAddress }: { poolAddress: string }) => {
 
   return (
     <Fragment>
-      <Button type="primary" onClick={() => setVisible(true)}>
-        Deposit/Withdraw
-      </Button>
+      <ButtonNeon onClick={() => setVisible(true)}>Deposit/Withdraw</ButtonNeon>
       <Modal
         visible={visible}
         closeIcon={<IonIcon name="close-outline" />}

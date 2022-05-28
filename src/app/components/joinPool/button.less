@@ -166,3 +166,91 @@
     }
   }
 }
+
+// Button leon
+
+.btn-neon {
+  position: relative;
+  background: #7a7979;
+  border: none;
+  padding: 0;
+  // box-shadow: 0 0 5px #14f195;
+  color: #000;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+  &-child {
+    position: relative;
+    padding: 4px 24px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: #000;
+    font-weight: 600;
+    &:before {
+      position: absolute;
+      content: '';
+      background: #14f195;
+      // box-shadow: 0 0 5px #14f195;
+      left: 0;
+      top: 0;
+      width: 0%;
+      height: 2px;
+      transition: all 500ms ease;
+    }
+    &:after {
+      position: absolute;
+      content: '';
+      background: #14f195;
+      // box-shadow: 0 0 5px #14f195;
+      right: 0;
+      bottom: 0;
+      width: 0%;
+      height: 2px;
+      transition: all 500ms ease;
+    }
+    &:hover {
+      color: #fff;
+      &:before {
+        width: 100%;
+      }
+      &:after {
+        width: 100%;
+      }
+    }
+  }
+  &:hover {
+    background: transparent;
+    &:before {
+      transition: all 500ms ease;
+      height: 100%;
+    }
+    &:after {
+      transition: all 500ms ease;
+      height: 100%;
+    }
+  }
+  &:before {
+    position: absolute;
+    content: '';
+    height: 0%;
+    width: 2px;
+    background: #14f195;
+    // box-shadow: 0 0 5px #14f195;
+    right: 0;
+    top: 0;
+    transition: all 500ms ease;
+  }
+  &:after {
+    position: absolute;
+    content: '';
+    height: 0%;
+    width: 2px;
+    background: #14f195;
+    // box-shadow: 0 0 5px #14f195;
+    left: 0;
+    bottom: 0;
+    transition: all 500ms ease;
+  }
+}

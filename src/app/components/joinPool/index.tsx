@@ -1,4 +1,5 @@
 import { Card, Col, Divider, Row, Space, Typography } from 'antd'
+import CreatePool from 'app/view/createPool'
 
 import './index.less'
 import JoinAction from './joinAction'
@@ -43,13 +44,20 @@ const JoinPool = () => {
     >
       <Row gutter={[48, 48]} justify="space-between">
         <Col span={12}>
-          <Space size={0} direction="vertical">
-            <Typography.Title
-              level={2}
-              style={{ fontWeight: 300, color: '#000' }}
-            >
-              HAKAPOOL
-            </Typography.Title>
+          <Space size={0} style={{ width: '100%' }} direction="vertical">
+            <Row gutter={[12, 12]}>
+              <Col flex="auto">
+                <Typography.Title
+                  level={2}
+                  style={{ fontWeight: 300, color: '#000' }}
+                >
+                  HAKAPOOL
+                </Typography.Title>
+              </Col>
+              <Col>
+                <CreatePool />
+              </Col>
+            </Row>
             <Typography.Title style={{ color: '#000' }} level={1}>
               ALL IN ONE 1 STEP
             </Typography.Title>

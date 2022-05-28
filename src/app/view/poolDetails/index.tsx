@@ -31,7 +31,7 @@ const PoolDetails = () => {
         <MintStable />
       </Col>
       <Col span={12}>
-        <MintPool />
+        <MintPool poolAddress={poolAddress} />
       </Col>
       <Col flex="auto">
         <Lending />

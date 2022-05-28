@@ -29,7 +29,7 @@ class TokenProvider {
     if (this.tokenMap.size && this.engine) return [this.tokenMap, this.engine]
     return new Promise(async (resolve) => {
       // Queue of getters to avoid race condition of multiple _init calling
-      if (this.loading) return this.queue.push(resolve)
+      // if (this.loading) return this.queue.push(resolve)
       // Start
       this.loading = true
       // Build token list
@@ -37,13 +37,15 @@ class TokenProvider {
       // await (await new TokenListProvider().resolve())
       //   .filterByChainId(this.chainId)
       //   .getList()
-      if (this.cluster === 'devnet') tokenList = tokenList.concat(supplementary)
-      if (this.cluster === 'testnet')
-        tokenList = tokenList.concat([sntr(102), sol(102)])
-      else tokenList = tokenList.concat([sol(101)])
+      tokenList = tokenList.concat(supplementary)
+      // if (this.cluster === 'devnet')
+      // if (this.cluster === 'testnet')
+      //   tokenList = tokenList.concat([sntr(102), sol(102)])
+      // else tokenList = tokenList.concat([sol(101)])
       // Build token map
       tokenList.forEach((token) => this.tokenMap.set(token.address, token))
       // Build search engine
+      console.log('tokenList', tokenList)
       this.engine = lunr(function () {
         this.ref('address')
         this.field('symbol')

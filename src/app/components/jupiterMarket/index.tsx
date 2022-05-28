@@ -57,7 +57,7 @@ const JupiterMarket = () => {
         onCancel={() => setVisible(false)}
         footer={false}
         closeIcon={<IonIcon name="close-outline" />}
-        title="Create new pool"
+        title="Create new jupiter"
       >
         <Button type="primary" onClick={() => onCreateJupiter()}>
           New

@@ -47,7 +47,7 @@ export const ModalContent = () => {
     <Row gutter={[24, 24]}>
       <Col span={24} style={{ textAlign: 'center' }}>
         <Typography.Title level={5} style={{ color: '#000000' }}>
-          New Pool
+          New HackaPool
         </Typography.Title>
       </Col>
       <Col span={24}>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useMint } from '@senhub/providers'
 
 import { Button, Col, Row, Space, Typography } from 'antd'
 import { MintSelection } from 'shared/antd/mint'
@@ -10,20 +11,27 @@ import { AppState } from 'app/model'
 import { useOracles } from 'app/hooks/useOracles'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { numeric } from 'shared/util'
-import { PoolDetailsProps } from '../poolDetails/index'
 import NumericInput from 'shared/antd/numericInput'
 import { BN } from 'bn.js'
+import { useLucidOracles } from 'app/hooks/useLucidOracles'
+import { BASE_TOKEN_DECIMAL } from 'app/constants'
 
-const Deposit = ({ poolAddress }: PoolDetailsProps) => {
+const Deposit = ({ poolAddress }: { poolAddress: string }) => {
   const pools = useSelector((state: AppState) => state.pools)
-  const { baseMint, mint } = pools[poolAddress]
+  const { baseMint, mint, lptMint, balance, baseBalance, lptSupply, fee } =
+    pools[poolAddress]
   const [amount, setAmount] = useState('0')
   const [baseAmount, setBaseAmount] = useState('0')
   const [loading, setLoading] = useState(false)
   const lucid = useLucid()
   const { decimalizeMintAmount } = useOracles()
   const mintBalance = useAccountBalanceByMintAddress(mint.toBase58())
-  const baseBalance = useAccountBalanceByMintAddress(baseMint.toBase58())
+  const baseBalanceOfAddress = useAccountBalanceByMintAddress(
+    baseMint.toBase58(),
+  )
+  const lptBalance = useAccountBalanceByMintAddress(lptMint.toBase58())
+  const { calcDepositInfo } = useLucidOracles()
+  const { getDecimals } = useMint()
 
   const onDeposit = async () => {
     try {
@@ -42,6 +50,25 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const onChangeDepositAmount = async (value: string) => {
+    setAmount(value)
+    const amountBN = await decimalizeMintAmount(amount, mint)
+    const baseAmountBN = await decimalizeMintAmount(amount, baseMint)
+    // const amountBN = await decimalizeMintAmount(amount, lptMint)
+    const amountIns = [amountBN, baseAmountBN]
+    const balanceIns = [balance, baseBalance]
+    const tokeDecimals = await getDecimals(mint.toBase58())
+    const decimalIns = [tokeDecimals, BASE_TOKEN_DECIMAL]
+    const lpt = calcDepositInfo(
+      amountIns,
+      balanceIns,
+      lptSupply,
+      decimalIns,
+      fee,
+    )
+    console.log(lpt, 'lpt da tinh duoc')
   }
 
   return (
@@ -71,7 +98,7 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
                 fontWeight: 700,
               }}
               value={amount}
-              onValue={setAmount}
+              onValue={onChangeDepositAmount}
             />
           </Col>
           <Col>
@@ -92,7 +119,7 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
       {/* Base Token */}
       <Col span={24} style={{ textAlign: 'right' }}>
         <Typography.Text style={{ color: '#000000' }}>
-          Available: {numeric(baseBalance.balance).format('0,0.[000]')}
+          Available: {numeric(baseBalanceOfAddress.balance).format('0,0.[000]')}
         </Typography.Text>
       </Col>
       <Col span={24}>
@@ -100,7 +127,7 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
           <Col>
             <Button
               type="primary"
-              onClick={() => setAmount(baseBalance.balance.toString())}
+              onClick={() => setAmount(baseBalanceOfAddress.balance.toString())}
             >
               MAX
             </Button>
@@ -149,7 +176,7 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
             </Col>
             <Col>
               <Typography.Title level={4} style={{ color: '#000000' }}>
-                {numeric(amount).format('0,0.[000]')}
+                {numeric(lptBalance.balance).format('0,0.[000]')}
               </Typography.Title>
             </Col>
           </Row>

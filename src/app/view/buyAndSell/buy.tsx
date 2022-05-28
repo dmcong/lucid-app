@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
-import { Button, Card, Col, Row } from 'antd'
+import { Button, Col, Row } from 'antd'
 import MintInput from 'app/components/mintInput'
 import IonIcon from '@sentre/antd-ionicon'
 
@@ -11,6 +11,9 @@ import { useSelector } from 'react-redux'
 import { AppState } from 'app/model'
 import configs from 'app/configs'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
+import { useLucidOracles } from 'app/hooks/useLucidOracles'
+import { usePoolData } from 'app/hooks/pool/usePoolData'
+import { GENERAL_NORMALIZED_NUMBER } from 'app/constants'
 
 type BuyProps = {
   poolAddress: string
@@ -28,13 +31,16 @@ const Buy = ({ poolAddress }: BuyProps) => {
   const { mint } = pools[poolAddress]
   const mintAddress = mint.toBase58()
   const lucid = useLucid()
-  const { decimalizeMintAmount } = useOracles()
+  const { decimalizeMintAmount, undecimalizeMintAmount } = useOracles()
+  const { calcOutGivenInSwap } = useLucidOracles()
+  const poolData = usePoolData(poolAddress)
 
   const { balance } = useAccountBalanceByMintAddress(baseMint)
 
   const onBuy = async () => {
     setLoading(true)
     try {
+      console.log(amount, 'so luong amount')
       const amountBN = await decimalizeMintAmount(amount, baseMint)
       const { txId } = await lucid.buy(poolAddress, amountBN, amountBN)
       return notifySuccess('Deposited', txId)
@@ -58,13 +64,29 @@ const Buy = ({ poolAddress }: BuyProps) => {
     }
   }
 
+  const onChangeAmount = async (amount: string) => {
+    setAmount(amount)
+    const { balance, stableBalance, fee, stableMint, mint } = poolData
+    const balanceNum = await undecimalizeMintAmount(balance, mint)
+    const stableNum = await undecimalizeMintAmount(stableBalance, stableMint)
+    // temp to get decimal
+    const numSwapFee = await undecimalizeMintAmount(fee, stableMint)
+    const receiveAmount = calcOutGivenInSwap(
+      Number(amount),
+      Number(balanceNum),
+      Number(stableNum),
+      Number(numSwapFee),
+    )
+    setReceive(`${receiveAmount}`)
+  }
+
   return (
     <Row gutter={[12, 12]} justify="center">
       <Col span={24}>
         <MintInput
           amount={amount}
           selectedMint={baseMint}
-          onChangeAmount={setAmount}
+          onChangeAmount={onChangeAmount}
           ratioButton={
             <Button
               type="primary"
@@ -88,7 +110,7 @@ const Buy = ({ poolAddress }: BuyProps) => {
         <MintInput
           amount={receive}
           selectedMint={mintAddress}
-          onChangeAmount={setAmount}
+          onChangeAmount={setReceive}
         />
       </Col>
       <Col span={24}>

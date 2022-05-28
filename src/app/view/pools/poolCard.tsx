@@ -14,6 +14,7 @@ import { numeric } from 'shared/util'
 import './style.less'
 import DepositAndWithdraw from '../depositAndWithdraw'
 import { usePoolTvl } from 'app/hooks/pool/usePoolTvl'
+import useAPR from 'app/hooks/pool/useAPR'
 import { useMyLiquidity } from 'app/hooks/pool/useMyLiquidity'
 import BorrowAnhRepay from '../borrowAndRepay'
 
@@ -24,6 +25,7 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
   const poolData = useSelector((state: AppState) => state.pools[poolAddress])
   const fee = usePoolFees(poolAddress)
   const tvl = usePoolTvl(poolAddress)
+  const apr = useAPR(poolAddress)
   const myLiquidity = useMyLiquidity(poolAddress)
 
   const onActive = () => {
@@ -63,7 +65,7 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
             <CardContent
               primary
               label="APY"
-              value={numeric(Math.random()).format('0.00[00]%')}
+              value={numeric(apr).format('0.00[00]%')}
             />
           </Col>
           <Col span={4}>

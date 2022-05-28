@@ -42,7 +42,6 @@ export default function MintInput({
     ui: { theme },
   } = useUI()
   const { balance } = useAccountBalanceByMintAddress(selectedMint)
-  console.log(balance)
   const onInput = (value: string) => {
     if (!onChangeAmount) return
     const invalidValue = Number(value) > balance && !!onChangeAmount

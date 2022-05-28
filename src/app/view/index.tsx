@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { Row, Col, Button } from 'antd'
 import Pools from './pools'
 import { useAppRouter } from 'app/hooks/useAppRouter'
-import PoolDetails from './poolDetails'
 import { useUI } from '@senhub/providers'
 import JupiterMarket from 'app/components/jupiterMarket'
 
@@ -35,9 +34,6 @@ const View = () => {
         </Button>
         <JupiterMarket />
         <Route exact path={`${appRoute}`} component={Pools} />
-        <Route exact path={`${appRoute}/pool/:poolId`} component={Pools}>
-          <PoolDetails />
-        </Route>
       </Col>
     </Row>
   )

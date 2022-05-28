@@ -6,9 +6,7 @@ import Deposit from './deposit'
 import Withdraw from './withdraw'
 import { SegmentedValue } from 'antd/lib/segmented'
 
-import { PoolDetailsProps } from '../poolDetails/index'
-
-const DepositAndWithdraw = ({ poolAddress }: PoolDetailsProps) => {
+const DepositAndWithdraw = ({ poolAddress }: { poolAddress: string }) => {
   const [visible, setVisible] = useState(false)
   const [value, setValue] = useState<SegmentedValue>('Deposit')
 

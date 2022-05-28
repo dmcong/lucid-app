@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux'
 
 import { Button, Col, Row, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
-import { PoolDetailsProps } from '../poolDetails/index'
 
 import { AppState } from 'app/model'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
@@ -12,7 +11,7 @@ import { useLucid } from 'app/hooks/useLucid'
 import { useOracles } from 'app/hooks/useOracles'
 import { notifyError, notifySuccess } from 'app/helper'
 
-const Withdraw = ({ poolAddress }: PoolDetailsProps) => {
+const Withdraw = ({ poolAddress }: { poolAddress: string }) => {
   const [amount, setAmount] = useState('0')
   const [loading, setLoading] = useState(false)
   const pools = useSelector((state: AppState) => state.pools)
@@ -43,7 +42,6 @@ const Withdraw = ({ poolAddress }: PoolDetailsProps) => {
       </Col>
       <Col span={24}>
         <NumericInput
-          bordered={false}
           onValue={setAmount}
           style={{
             color: '#000000',

@@ -423,6 +423,115 @@ class LucidProgram {
       watchId,
     )
   }
+
+  getAllJupiter = async () => {
+    return this.program.account.jupiter.all()
+  }
+
+  getJupiterPDAs = async (
+    jupiter: Address,
+    mint: Address = web3.Keypair.generate().publicKey,
+  ) => {
+    const jupiterPublicKey = new web3.PublicKey(jupiter)
+    let mintPublicKey: web3.PublicKey | undefined = undefined
+    let mintTreasury: web3.PublicKey | undefined = undefined
+
+    const [treasurer] = await web3.PublicKey.findProgramAddress(
+      [Buffer.from('treasurer'), jupiterPublicKey.toBuffer()],
+      this.program.programId,
+    )
+    const [baseMint] = await web3.PublicKey.findProgramAddress(
+      [Buffer.from('base_mint'), jupiterPublicKey.toBuffer()],
+      this.program.programId,
+    )
+
+    if (mint) {
+      mintPublicKey = new web3.PublicKey(mint)
+      mintTreasury = await utils.token.associatedAddress({
+        mint: mintPublicKey,
+        owner: treasurer,
+      })
+    }
+
+    return {
+      jupiter: jupiterPublicKey,
+      treasurer,
+      mint: mintPublicKey,
+      mintTreasury,
+      baseMint,
+    }
+  }
+
+  getTokenAccountsJupiter = async (
+    authority: Address,
+    mint: Address,
+    baseMint: Address,
+  ) => {
+    const walletPublicKey = new web3.PublicKey(authority)
+    const mintPublicKey = new web3.PublicKey(mint)
+    const baseMintPublicKey = new web3.PublicKey(baseMint)
+
+    const tokenAccount = await utils.token.associatedAddress({
+      mint: mintPublicKey,
+      owner: walletPublicKey,
+    })
+    const baseTokenAccount = await utils.token.associatedAddress({
+      mint: baseMintPublicKey,
+      owner: walletPublicKey,
+    })
+
+    return {
+      tokenAccount,
+      baseTokenAccount,
+    }
+  }
+
+  initializeJupiter = async () => {
+    const jupiter = web3.Keypair.generate()
+    const wallet = this._provider.wallet
+    const PDAs = await this.getJupiterPDAs(jupiter.publicKey)
+    const txId = await this.program.methods
+      .initializeJupiter()
+      .accounts({
+        authority: wallet.publicKey,
+        ...PDAs,
+        ...DEFAULT_PROGRAMS,
+      })
+      .signers([jupiter])
+      .rpc()
+    return { txId, address: jupiter.publicKey }
+  }
+
+  swapJupiter = async (
+    baseMint: Address,
+    mint: Address,
+    amountIn: BN,
+    amountOut: BN,
+  ) => {
+    const listJupiter = await this.getAllJupiter()
+    const wallet = this._provider.wallet
+    for (const jupiter of listJupiter) {
+      if (jupiter.account.baseMint.toBase58() !== baseMint.toString()) continue
+
+      const PDAs = await this.getJupiterPDAs(jupiter.publicKey, mint)
+      const tokenAccounts = await this.getTokenAccountsJupiter(
+        wallet.publicKey,
+        mint,
+        jupiter.account.baseMint,
+      )
+
+      return this.program.methods
+        .swapJupiter(amountIn, amountOut)
+        .accounts({
+          authority: wallet.publicKey,
+          ...PDAs,
+          ...tokenAccounts,
+          ...DEFAULT_PROGRAMS,
+        })
+        .rpc()
+    }
+    return null
+  }
 }
 
 export * from './constant'

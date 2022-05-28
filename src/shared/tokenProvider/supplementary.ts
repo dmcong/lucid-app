@@ -35,7 +35,7 @@ const supplementary = [
   {
     symbol: 'LUCID',
     name: 'Lucid Protocol',
-    address: 'HJu2n1oZrjjxiCix442Ke5SCYbbih7btjBMqwXcoibbR',
+    address: 'KXtP4RtYWJimgFo55eMqSS848WM3naSpGKCK2SSrhKq',
     decimals: 9,
     chainId: 103,
     extensions: {
@@ -46,14 +46,14 @@ const supplementary = [
   {
     symbol: 'wBTC',
     name: 'Wrapped Bitcoin',
-    address: '8jk4eJymMfNZV9mkRNxJEt2VJ3pRvdJvD5FE94GXGBPM',
+    address: '7dH1RdQ7T3fihkEFBywAvj4otHVThF3tcQsgcM7rRTWi',
     decimals: 9,
     chainId: 103,
     extensions: {
       coingeckoId: 'bitcoin',
     },
     logoURI:
-      'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/qfnqNqs3nCAHjnyCgLRDbBtq4p2MtHZxw8YjSyYhPoL/logo.png',
+      'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E/logo.png',
   },
   {
     symbol: 'wETH',
@@ -70,7 +70,7 @@ const supplementary = [
   {
     symbol: 'UNI',
     name: 'Uniswap',
-    address: 'FVZFSXu3yn17YdcxLD72TFDUqkdE5xZvcW18EUpRQEbe',
+    address: '4yB7HvKcpfAP4TVg4KnWAgmM9fRWAYWev17QM91bkQ3W',
     decimals: 9,
     chainId: 103,
     extensions: {
@@ -82,7 +82,7 @@ const supplementary = [
   {
     symbol: 'USDC',
     name: 'USD Coin',
-    address: '2z6Ci38Cx6PyL3tFrT95vbEeB3izqpoLdxxBkJk2euyj',
+    address: '86RG7SrLu1dtuE2Eyg3XqWjEdpUwNUM7hsbMS5MVmv66',
     decimals: 9,
     chainId: 103,
     extensions: {

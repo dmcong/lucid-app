@@ -127,7 +127,6 @@ export const useLucidOracles = () => {
   const calcLpForTokensZeroPriceImpact = (
     tokenAmountIns: BN[],
     balanceIns: BN[],
-    weightIns: BN[],
     totalSupply: BN,
     decimalIns: number[],
   ) => {
@@ -160,7 +159,6 @@ export const useLucidOracles = () => {
   const calcDepositInfo = (
     amountIns: BN[],
     balanceIns: BN[],
-    weightIns: BN[],
     totalSupply: BN,
     decimalIns: number[],
     swapFee: BN,
@@ -181,7 +179,6 @@ export const useLucidOracles = () => {
       calcLpForTokensZeroPriceImpact(
         amountIns,
         balanceIns,
-        weightIns,
         totalSupply,
         decimalIns,
       ).toFixed(9),
@@ -206,4 +203,6 @@ export const useLucidOracles = () => {
     })
     return amounts_out
   }
+
+  return {}
 }

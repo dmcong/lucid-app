@@ -31,7 +31,10 @@ const DepositAndWithdraw = ({ poolAddress }: { poolAddress: string }) => {
           </Col>
           <Col span={24}>
             {value === 'Deposit' ? (
-              <Deposit poolAddress={poolAddress} />
+              <Deposit
+                poolAddress={poolAddress}
+                closeModal={() => setVisible(false)}
+              />
             ) : (
               <Withdraw poolAddress={poolAddress} />
             )}

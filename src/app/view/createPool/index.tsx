@@ -17,7 +17,7 @@ const CreatePool = () => {
         onCancel={() => setVisible(false)}
         footer={false}
         closeIcon={<IonIcon name="close-outline" />}
-        title="Create new pool"
+        className="lucid-modal-gradient"
       >
         <ModalContent />
       </Modal>

@@ -5,7 +5,7 @@ import IonIcon from '@sentre/antd-ionicon'
 import { Button, Card, Col, Collapse, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintName, MintSymbol } from 'shared/antd/mint'
 import CardContent from './cardContent'
-import BuyAndSell from '../poolDetails/buyAndSell'
+import BuyAndSell from '../buyAndSell'
 
 import { AppState } from 'app/model'
 import { usePoolFees } from 'app/hooks/pool/usePoolFees'
@@ -102,6 +102,8 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
           <Row gutter={[24, 24]}>
             <Col>
               <BuyAndSell poolAddress={poolAddress} />
+            </Col>
+            <Col>
               <DepositAndWithdraw poolAddress={poolAddress} />
             </Col>
           </Row>

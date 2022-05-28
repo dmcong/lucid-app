@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import { Button, Col, Row, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
-import { PoolDetailsProps } from '../poolDetails/index'
+import { PoolDetailsProps } from '../index'
 
 import { AppState } from 'app/model'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
@@ -43,8 +43,8 @@ const Withdraw = ({ poolAddress }: PoolDetailsProps) => {
       </Col>
       <Col span={24}>
         <NumericInput
-          bordered={false}
           onValue={setAmount}
+          bordered={false}
           style={{
             color: '#000000',
             fontSize: '20px',

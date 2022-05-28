@@ -1,7 +1,7 @@
 import { Button, Col, Row } from 'antd'
 import { useAppRouter } from 'app/hooks/useAppRouter'
 import { PoolDetailsProps } from './index'
-import DepositAndWithdraw from './depositAndWithdraw'
+import DepositAndWithdraw from '../depositAndWithdraw'
 
 const Header = ({ poolAddress }: PoolDetailsProps) => {
   const { pushHistory } = useAppRouter()

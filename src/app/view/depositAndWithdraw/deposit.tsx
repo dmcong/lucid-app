@@ -1,6 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import isEqual from 'react-fast-compare'
 
 import { Button, Col, Row, Space, Typography } from 'antd'
 import { MintSelection } from 'shared/antd/mint'
@@ -11,13 +10,13 @@ import { AppState } from 'app/model'
 import { useOracles } from 'app/hooks/useOracles'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { numeric } from 'shared/util'
-import { PoolDetailsProps } from '../index'
+import { PoolDetailsProps } from '../poolDetails/index'
 import NumericInput from 'shared/antd/numericInput'
 import { BN } from 'bn.js'
 
 const Deposit = ({ poolAddress }: PoolDetailsProps) => {
   const pools = useSelector((state: AppState) => state.pools)
-  const { baseMint, mint, stableMint } = pools[poolAddress]
+  const { baseMint, mint } = pools[poolAddress]
   const [amount, setAmount] = useState('0')
   const [baseAmount, setBaseAmount] = useState('0')
   const [loading, setLoading] = useState(false)
@@ -31,7 +30,6 @@ const Deposit = ({ poolAddress }: PoolDetailsProps) => {
       setLoading(true)
       const amountBN = await decimalizeMintAmount(amount, mint)
       const baseBN = await decimalizeMintAmount(baseAmount, baseMint)
-
       const { txId } = await lucid.addLiquidity(
         poolAddress,
         amountBN,

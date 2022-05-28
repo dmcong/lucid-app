@@ -1,9 +1,11 @@
 .pool-card {
+  position: relative;
   border-radius: 999px !important;
   background: rgba(255, 255, 255, 0.12) !important;
   backdrop-filter: blur(20px);
   cursor: pointer;
   transition: all 0.15s linear;
+  z-index: 99;
   // &.active {
   //   border-radius: 44px 44px 0 0 !important;
   // }
@@ -38,7 +40,7 @@
     position: absolute !important;
     top: 18px;
     left: -5px;
-    z-index: -2;
+    z-index: -1;
   }
 }
 // Expand card
@@ -48,7 +50,7 @@
   background: rgba(255, 255, 255, 0.29) !important;
   border: none !important;
   border-radius: 0 0 44px 44px !important;
-  z-index: -1;
+  z-index: 98;
   .lucid-collapse-header {
     padding: 0 !important;
     border: none !important;

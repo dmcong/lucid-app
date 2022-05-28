@@ -37,3 +37,22 @@
     left: -5px;
   }
 }
+// Expand card
+.lucid-expand-card {
+  position: relative;
+  top: -8px;
+  background-color: #f4f4f5 !important;
+  border: none !important;
+  border-radius: 0 0 8px 8px !important;
+  z-index: 0;
+  .lucid-collapse-header {
+    padding: 0 !important;
+    border: none !important;
+  }
+  .lucid-collapse-content-box {
+    padding: 32px 16px 16px 16px !important;
+  }
+  & *:not(button) {
+    background-color: transparent !important;
+  }
+}

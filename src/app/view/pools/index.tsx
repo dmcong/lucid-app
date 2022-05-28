@@ -1,4 +1,4 @@
-import { ReactNode, useCallback } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Button, Card, Col, Image, Row, Space, Typography } from 'antd'
@@ -9,6 +9,14 @@ import { AppState } from 'app/model'
 import IonIcon from '@sentre/antd-ionicon'
 
 import IcoRank from 'app/static/images/ico-rank.svg'
+import { useBestPoolAddress } from 'app/hooks/pool/useBestPoolData'
+import { numeric } from 'shared/util'
+import { useMyLiquidity } from 'app/hooks/pool/useMyLiquidity'
+import { useOracles } from 'app/hooks/useOracles'
+import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
+import { usePoolData } from 'app/hooks/pool/usePoolData'
+import { notifyError, notifySuccess } from 'app/helper'
+import { useLucid } from 'app/hooks/useLucid'
 
 type CardValueProps = { label?: string; value?: ReactNode; action?: ReactNode }
 const CardValue = ({ label = '', value, action }: CardValueProps) => {
@@ -36,10 +44,28 @@ const CardValue = ({ label = '', value, action }: CardValueProps) => {
 }
 
 const ActionClaim = () => {
-  const claim = useCallback(() => {}, [])
+  const bestPoolAddress = useBestPoolAddress()
+  const { lptMint } = usePoolData(bestPoolAddress)
+  const { balance } = useAccountBalanceByMintAddress(lptMint.toBase58())
+  const [loading, setLoading] = useState(false)
+  const { decimalizeMintAmount } = useOracles()
+  const lucid = useLucid()
+
+  const claim = useCallback(async () => {
+    try {
+      setLoading(true)
+      const amountBN = await decimalizeMintAmount(balance, lptMint)
+      const { txId } = await lucid.removeLiquidity(bestPoolAddress, amountBN)
+      return notifySuccess('Deposited', txId)
+    } catch (error) {
+      notifyError(error)
+    } finally {
+      setLoading(false)
+    }
+  }, [balance, bestPoolAddress, decimalizeMintAmount, lptMint, lucid])
 
   return (
-    <Button type="text" onClick={claim}>
+    <Button type="text" onClick={claim} loading={loading}>
       <Typography.Text style={{ color: '#000', textDecoration: 'underline' }}>
         CLAIM ALL <IonIcon name="chevron-forward-outline" />
       </Typography.Text>
@@ -49,6 +75,21 @@ const ActionClaim = () => {
 
 const Pools = () => {
   const pools = useSelector((state: AppState) => state.pools)
+  const betsPool = useBestPoolAddress()
+  const [tvl, setTvl] = useState('0')
+  const myLiquidity = useMyLiquidity(betsPool)
+  const { undecimalize } = useOracles()
+
+  const calcTVL = useCallback(() => {
+    let tvl = 0
+    for (const pool of Object.values(pools)) {
+      tvl += Number(undecimalize(pool.stableBalance, 9)) * 2
+    }
+    setTvl(tvl.toString())
+  }, [pools, undecimalize])
+  useEffect(() => {
+    calcTVL()
+  }, [calcTVL])
 
   return (
     <Row gutter={[48, 48]}>
@@ -70,18 +111,21 @@ const Pools = () => {
               <Col span={24}>
                 <CardValue
                   label="TOTAL VALUE LOCK"
-                  value={<span>$23.323.333</span>}
+                  value={<span>{numeric(tvl).format('$0,0.00[00]a')}</span>}
                 />
               </Col>
               <Col span={24}>
-                <CardValue label="YOUR POSITION" value={<span>$17.323</span>} />
+                <CardValue
+                  label="TOTAL POOLS"
+                  value={<span>{Object.keys(pools).length}</span>}
+                />
               </Col>
             </Row>
           </Col>
           <Col xs={24} lg={8}>
             <CardValue
-              label="MY REWARD"
-              value={<span>$0.00</span>}
+              label="YOUR POSITION"
+              value={<span>${numeric(myLiquidity).format('0,0.00[00]a')}</span>}
               action={<ActionClaim />}
             />
           </Col>

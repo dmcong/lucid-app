@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import { Button, Col, Row, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
-import { PoolDetailsProps } from '../index'
+import { PoolDetailsProps } from '../poolDetails/index'
 
 import { AppState } from 'app/model'
 import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'

@@ -5,7 +5,7 @@ import { Button, Modal, Tabs } from 'antd'
 import Deposit from './deposit'
 import Withdraw from './withdraw'
 
-import { PoolDetailsProps } from '../index'
+import { PoolDetailsProps } from '../poolDetails/index'
 
 const DepositAndWithdraw = ({ poolAddress }: PoolDetailsProps) => {
   const [visible, setVisible] = useState(false)

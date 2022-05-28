@@ -12,6 +12,9 @@ import { usePoolFees } from 'app/hooks/pool/usePoolFees'
 import { numeric } from 'shared/util'
 
 import './style.less'
+import DepositAndWithdraw from '../depositAndWithdraw'
+import { usePoolTvl } from 'app/hooks/pool/usePoolTvl'
+import { useMyLiquidity } from 'app/hooks/pool/useMyLiquidity'
 
 type PoolCardProps = { rank: number; poolAddress: string }
 
@@ -19,6 +22,8 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
   const [activeKey, setActiveKey] = useState<string>()
   const poolData = useSelector((state: AppState) => state.pools[poolAddress])
   const fee = usePoolFees(poolAddress)
+  const tvl = usePoolTvl(poolAddress)
+  const myLiquidity = useMyLiquidity(poolAddress)
 
   const onActive = () => {
     if (activeKey) return setActiveKey(undefined)
@@ -70,14 +75,14 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
           <Col span={4}>
             <CardContent
               label="Total Value Locked"
-              value={numeric(Math.random() * 100000).format('0,0.00[00]')}
+              value={numeric(tvl).format('0,0.00[00]a')}
               mintAddress={poolData.baseMint.toBase58()}
             />
           </Col>
           <Col span={4}>
             <CardContent
               label="Your Liquidity"
-              value={numeric(Math.random() * 100000).format('0,0.00[00]')}
+              value={numeric(Number(myLiquidity)).format('0,0.00[00]')}
               mintAddress={poolData.baseMint.toBase58()}
             />
           </Col>
@@ -97,6 +102,7 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
           <Row gutter={[24, 24]}>
             <Col>
               <BuyAndSell poolAddress={poolAddress} />
+              <DepositAndWithdraw poolAddress={poolAddress} />
             </Col>
           </Row>
         </Collapse.Panel>

@@ -1,6 +1,7 @@
 import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
 import { fetchCGK, numeric } from 'shared/util'
 import { BN } from 'bn.js'
+import { useMint } from '@senhub/providers'
 
 import { Button, Col, Modal, Row, Space, Typography } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
@@ -14,11 +15,11 @@ import { useAccountBalanceByMintAddress } from 'shared/hooks/useAccountBalance'
 import { notifyError, notifySuccess } from 'app/helper'
 import { useOracles } from 'app/hooks/useOracles'
 import { useLucid } from 'app/hooks/useLucid'
-
-import configs from 'app/configs'
 import { useBestPoolAddress } from 'app/hooks/pool/useBestPoolData'
 import { usePoolData } from 'app/hooks/pool/usePoolData'
-import { useMint } from '@senhub/providers'
+
+import configs from 'app/configs'
+import './button.less'
 
 const {
   sol: { baseMint },
@@ -114,6 +115,15 @@ const JoinAction = ({ poolAddress }: JoinActionProps) => {
         >
           Join Now
         </button>
+        {/* <div className="btn-group">
+          <div className="btn ball">
+            <button>
+              <div className="joinnow-ball"></div>Join now
+              <span data-letters="Go!"></span>
+              <span data-letters="Go!"></span>
+            </button>
+          </div>
+        </div> */}
       </Col>
 
       <Modal

@@ -67,8 +67,15 @@ export const useLucidOracles = () => {
     const numAmountIns = tokenAmountIns.map((value, idx) =>
       Number(util.undecimalize(BigInt(value.toString()), decimalIns[idx])),
     )
-    const balanceRatiosWithFee = new Array(tokenAmountIns.length)
 
+    console.log(
+      fee,
+      numTotalSupply,
+      numBalanceIns,
+      numAmountIns,
+      'numAmountIns',
+    )
+    const balanceRatiosWithFee = new Array(tokenAmountIns.length)
     let invariantRatioWithFees = 0
     for (let i = 0; i < tokenAmountIns.length; i++) {
       balanceRatiosWithFee[i] =
@@ -211,16 +218,6 @@ export const useLucidOracles = () => {
     balanceIn: number,
     swapFee: number,
   ): number => {
-    console.log(
-      'amountIn',
-      amountIn,
-      'balanceOut',
-      balanceOut,
-      'balanceIn:',
-      balanceIn,
-      'swapFee:',
-      swapFee,
-    )
     // const numSwapFee = swapFee.toNumber() / GENERAL_NORMALIZED_NUMBER
     const ratioBeforeAfterBalance = balanceIn / (balanceIn + amountIn)
 

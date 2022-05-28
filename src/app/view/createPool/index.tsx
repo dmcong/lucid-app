@@ -1,8 +1,8 @@
-import { Button, Modal } from 'antd'
-import React, { Fragment, useState } from 'react'
+import { Fragment, useState } from 'react'
 import IonIcon from '@sentre/antd-ionicon'
+
+import { Button, Modal } from 'antd'
 import { ModalContent } from './modalContent'
-import { useLucid } from 'app/hooks/useLucid'
 
 const CreatePool = () => {
   const [visible, setVisible] = useState(false)

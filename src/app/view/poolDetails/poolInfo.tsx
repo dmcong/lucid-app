@@ -1,9 +1,11 @@
+import { useSelector } from 'react-redux'
+
 import { Card, Col, Row, Space, Typography } from 'antd'
 import RowSpaceVertical from 'app/components/rowSpaceVertical'
 import useAPR from 'app/hooks/pool/useAPR'
-import useTVL from 'app/hooks/pool/useTVL'
+import { usePoolTvl } from 'app/hooks/pool/usePoolTvl'
 import { AppState } from 'app/model'
-import { useSelector } from 'react-redux'
+
 import { MintAvatar, MintName, MintSymbol } from 'shared/antd/mint'
 import { numeric } from 'shared/util'
 import { PoolDetailsProps } from './index'
@@ -13,7 +15,7 @@ const PoolInfo = ({ poolAddress }: PoolDetailsProps) => {
   const poolData = pools[poolAddress]
   const { mint } = poolData
   const mintAddress = mint.toBase58()
-  const tvl = useTVL(poolAddress)
+  const tvl = usePoolTvl(poolAddress)
   const apr = useAPR(poolAddress)
   return (
     <Card>

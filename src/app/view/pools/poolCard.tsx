@@ -7,14 +7,15 @@ import './style.less'
 import { useAppRouter } from 'app/hooks/useAppRouter'
 import { useSelector } from 'react-redux'
 import { AppState } from 'app/model'
+import { usePoolFees } from 'app/hooks/pool/usePoolFees'
 
 type PoolCardProps = { rank: number; poolAddress: string }
 
 const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
   const poolData = useSelector((state: AppState) => state.pools[poolAddress])
   const { pushHistory } = useAppRouter()
+  const fee = usePoolFees(poolAddress)
 
-  console.log('poolData', poolData)
   const onClick = () => {
     pushHistory(`/pool/${poolAddress}`)
   }
@@ -53,7 +54,7 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
         <Col span={4}>
           <CardContent
             label="Total Fee"
-            value={numeric(Math.random() * 100000).format('0,0.00[00]')}
+            value={numeric(fee.totalFee).format('0,0.00[00]')}
             mintAddress={poolData.baseMint.toBase58()}
           />
         </Col>

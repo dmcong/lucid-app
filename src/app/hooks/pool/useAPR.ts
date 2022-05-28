@@ -1,17 +1,11 @@
 import { usePoolData } from './usePoolData'
-
-const SECOND_PER_DATE = 24 * 60 * 60
+import { usePoolDay } from './usePoolDay'
 
 const useAPR = (poolAddress: string) => {
   const pool = usePoolData(poolAddress)
+  const day = usePoolDay(poolAddress)
 
-  const currentTime = Math.floor(new Date().getTime() / 1000)
-  const startTime = pool.startTime.toNumber()
-
-  let date = (currentTime - startTime) / SECOND_PER_DATE
-  if (date < 1) date = 1
-
-  const feePerDay = pool.totalLptFee.toNumber() / date
+  const feePerDay = pool.totalLptFee.toNumber() / day
   const roi = feePerDay / pool.lptSupply.toNumber()
 
   return Number(Number(roi * 365).toFixed(6))

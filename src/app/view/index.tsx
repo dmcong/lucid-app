@@ -6,8 +6,9 @@ import Pools from './pools'
 import { useAppRouter } from 'app/hooks/useAppRouter'
 import PoolDetails from './poolDetails'
 import { useUI } from '@senhub/providers'
+import JupiterMarket from 'app/components/jupiterMarket'
 
-import Background from 'app/static/images/background.webp'
+import Background from 'app/static/images/bg_lucid.svg'
 import { useProvider } from 'app/hooks/useLucid'
 import { newToken } from 'app/helper/mint'
 
@@ -32,6 +33,7 @@ const View = () => {
         <Button onClick={() => onCreateNewToken()}>
           Create new Token for test
         </Button>
+        <JupiterMarket />
         <Route exact path={`${appRoute}`} component={Pools} />
         <Route exact path={`${appRoute}/pool/:poolId`} component={Pools}>
           <PoolDetails />

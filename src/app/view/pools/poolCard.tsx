@@ -1,13 +1,16 @@
-import { Button, Card, Col, Row, Space, Typography } from 'antd'
-import IonIcon from '@sentre/antd-ionicon'
-import { MintAvatar, MintName, MintSymbol } from 'shared/antd/mint'
-import { numeric } from 'shared/util'
-import CardContent from './cardContent'
-import './style.less'
-import { useAppRouter } from 'app/hooks/useAppRouter'
 import { useSelector } from 'react-redux'
+import { numeric } from 'shared/util'
+import IonIcon from '@sentre/antd-ionicon'
+
+import { Button, Card, Col, Row, Space, Typography } from 'antd'
+import { MintAvatar, MintName, MintSymbol } from 'shared/antd/mint'
+import CardContent from './cardContent'
+
+import { useAppRouter } from 'app/hooks/useAppRouter'
 import { AppState } from 'app/model'
 import { usePoolFees } from 'app/hooks/pool/usePoolFees'
+
+import './style.less'
 
 type PoolCardProps = { rank: number; poolAddress: string }
 
@@ -20,16 +23,15 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
     pushHistory(`/pool/${poolAddress}`)
   }
 
-  console.log('poolData.stableMint.toBase58()', poolData.stableMint.toBase58())
   return (
     <Card
       bordered={false}
-      className={`pool-card top-${rank}`}
+      className={`pool-card top-${rank + 1}`}
       onClick={onClick}
     >
       <Row gutter={[24, 24]} align="middle">
         <Col>
-          <Typography.Title level={5}>{rank}</Typography.Title>
+          <Typography.Title level={5}>{rank + 1}</Typography.Title>
         </Col>
         <Col>
           <MintAvatar mintAddress={poolData.mint.toBase58()} size={48} />
@@ -39,7 +41,11 @@ const PoolCard = ({ rank, poolAddress }: PoolCardProps) => {
             <Typography.Title level={5}>
               <MintName mintAddress={poolData.mint.toBase58()} />
             </Typography.Title>
-            <Typography.Title level={5} className="symbol">
+            <Typography.Title
+              level={5}
+              className="symbol"
+              style={{ color: '#000' }}
+            >
               <MintSymbol mintAddress={poolData.mint.toBase58()} />
             </Typography.Title>
           </Space>

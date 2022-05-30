@@ -20,7 +20,7 @@ const View = () => {
   return (
     <Row gutter={[24, 24]} align="middle" justify="center">
       <Col style={{ maxWidth: 1200 }} span={24}>
-        {/* <JupiterMarket /> */}
+        <JupiterMarket />
         <Route exact path={`${appRoute}`} component={Pools} />
       </Col>
     </Row>

@@ -24,8 +24,16 @@ const Deposit = ({
   closeModal: () => void
 }) => {
   const pools = useSelector((state: AppState) => state.pools)
-  const { baseMint, mint, lptMint, balance, baseBalance, lptSupply, fee } =
-    pools[poolAddress]
+  const {
+    baseMint,
+    mint,
+    lptMint,
+    balance,
+    baseBalance,
+    lptSupply,
+    fee,
+    stableBalance,
+  } = pools[poolAddress]
   const [amount, setAmount] = useState('0')
   const [baseAmount, setBaseAmount] = useState('0')
   const [loading, setLoading] = useState(false)
@@ -86,7 +94,7 @@ const Deposit = ({
     const baseAmountBN = await decimalizeMintAmount(value, baseMint)
     // const amountBN = await decimalizeMintAmount(amount, lptMint)
     const amountIns = [amountBN, baseAmountBN]
-    const balanceIns = [balance, baseBalance]
+    const balanceIns = [balance, stableBalance]
     const tokeDecimals = await getDecimals(mint.toBase58())
     const decimalIns = [tokeDecimals, BASE_TOKEN_DECIMAL]
     const lpt = calcDepositInfo(
